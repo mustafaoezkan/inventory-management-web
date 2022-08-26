@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import Login from "./components/Authentication/Login";
+import ResetPassword from './components/Authentication/ResetPassword';
+import Layout from "./components/General/Layout";
+import RequireAuth from './components/General/RequireAuth';
+import LandingPage from './components/LandingPage/LandingPage';
+import Register from './components/Authentication/Register';
+import Category from './components/Category/Category';
+import Product from './components/Product/Product';
+import Missing from './components/General/Missing';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        {/* Public routes */}
+        <Route path="giris" element={<Login />} />
+        <Route path="sifremi-unuttum" element={<ResetPassword />} />
+        {/* Private routes */}
+        <Route element={<RequireAuth />}>
+          <Route path="/" element={<LandingPage />} />
+          <Route path='/kullanici-ekle' element={<Register />} />
+          <Route path='/kategori' element={<Category />} />
+          <Route path='/urun' element={<Product />} />
+        </Route>
+        {/* Missing routes */}
+        <Route path="*" element={<Missing />} />
+      </Route>
+    </Routes>
   );
 }
 
