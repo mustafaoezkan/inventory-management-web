@@ -1,8 +1,9 @@
 import React from 'react'
+import AdminLandingPage from './AdminLandingPage'
 
 function LandingPage() {
     return (
-        <div>LandingPage</div>
+        <AdminLandingPage />
     )
 }
 

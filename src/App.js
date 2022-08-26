@@ -8,25 +8,39 @@ import Register from './components/Authentication/Register';
 import Category from './components/Category/Category';
 import Product from './components/Product/Product';
 import Missing from './components/General/Missing';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#00ADB5",
+    },
+    secondary: {
+      main: "#393E46",
+    }
+  }
+});
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        {/* Public routes */}
-        <Route path="giris" element={<Login />} />
-        <Route path="sifremi-unuttum" element={<ResetPassword />} />
-        {/* Private routes */}
-        <Route element={<RequireAuth />}>
-          <Route path="/" element={<LandingPage />} />
-          <Route path='/kullanici-ekle' element={<Register />} />
-          <Route path='/kategori' element={<Category />} />
-          <Route path='/urun' element={<Product />} />
+    <ThemeProvider theme={theme}>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          {/* Public routes */}
+          <Route path="giris" element={<Login />} />
+          <Route path="sifremi-unuttum" element={<ResetPassword />} />
+          {/* Private routes */}
+          <Route element={<RequireAuth />}>
+            <Route path="/" element={<LandingPage />} />
+            <Route path='/kullanici-ekle' element={<Register />} />
+            <Route path='/kategori' element={<Category />} />
+            <Route path='/urun' element={<Product />} />
+          </Route>
+          {/* Missing routes */}
+          <Route path="*" element={<Missing />} />
         </Route>
-        {/* Missing routes */}
-        <Route path="*" element={<Missing />} />
-      </Route>
-    </Routes>
+      </Routes>
+    </ThemeProvider>
   );
 }
 
