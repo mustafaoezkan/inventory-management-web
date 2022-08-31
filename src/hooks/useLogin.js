@@ -7,8 +7,10 @@ const useLogin = () => {
                 kullanici_adi: username,
                 sifre: password,
             });
+            const authentication = response.data.yetki[0].yetki;
             const token = response?.data?.token;
             localStorage.setItem("token", token);
+            localStorage.setItem("authentication", authentication);
             return response;
         } catch (err) {
             return err.response;

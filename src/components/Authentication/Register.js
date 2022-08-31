@@ -2,6 +2,8 @@ import { Box, Button, Card, FormControl, InputLabel, MenuItem, Select, TextField
 import { Container } from '@mui/system'
 import React from 'react'
 import useRegistration from '../../hooks/useRegistration'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Register() {
     const { registration } = useRegistration()
@@ -19,19 +21,35 @@ function Register() {
     const handleSubmit = (e) => {
         e.preventDefault()
         registration(username, password, name, surname, email, number, registrationNumber, degree, authentication).then(res => {
-            console.log(res)
-            setUsername('')
-            setPassword('')
-            setName('')
-            setSurname('')
-            setEmail('')
-            setNumber('')
-            setRegistrationNumber('')
-            setDegree('')
-            setAuthentication('')
-        }).catch(err => {
-            console.log(err)
-        })
+            if (res.status === 201) {
+                setUsername('')
+                setPassword('')
+                setName('')
+                setSurname('')
+                setEmail('')
+                setNumber('')
+                setRegistrationNumber('')
+                setDegree('')
+                setAuthentication('')
+                toast("Kullanıcı eklendi", {
+                    type: "info",
+                    position: "top-right",
+                    autoClose: 3000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
+            } else {
+                toast("Kullanıcı eklenemedi!", {
+                    type: "error",
+                    position: "top-right",
+                    autoClose: 3000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
+            }
+        });
     };
 
     const handleChange = (e) => {

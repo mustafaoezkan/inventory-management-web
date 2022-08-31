@@ -11,7 +11,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import useLogin from '../../hooks/useLogin';
+import { toast } from 'react-toastify';
 import { useNavigate, useLocation } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function SignIn() {
@@ -27,11 +29,27 @@ export default function SignIn() {
     const handleSubmit = (event) => {
         event.preventDefault();
         login(username, password).then(response => {
-            console.log(response);
-            navigate(from, { replace: true });
-        }).catch(err => {
-            console.log(err);
-        })
+            if (response.status === 200) {
+                navigate(from, { replace: true });
+                toast("Başarı ile giriş yapıldı!", {
+                    type: "success",
+                    position: "top-right",
+                    autoClose: 3000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
+            } else {
+                toast("Giriş yapılamadı!", {
+                    type: "error",
+                    position: "top-right",
+                    autoClose: 3000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
+            }
+        });
     };
 
     React.useEffect(() => {

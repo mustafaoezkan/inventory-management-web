@@ -4,11 +4,12 @@ import React from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import InventoryIcon from '@mui/icons-material/Inventory';
-import DashboardIcon from '@mui/icons-material/Dashboard';
+import HomeIcon from '@mui/icons-material/Home';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import CategoryIcon from '@mui/icons-material/Category';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import GroupIcon from '@mui/icons-material/Group';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { ToastContainer } from 'react-toastify';
 
 const drawerWidth = 73;
 
@@ -103,6 +104,16 @@ function Layout(props) {
                 }} >
                     <Outlet />
                 </Card>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={2000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover />
             </Box>
         ) : location.pathname === "/sifremi-unuttum" ? (
             <>
@@ -140,7 +151,7 @@ function Layout(props) {
                                     navigate("/", { replace: true });
                                 }}>
                                     <ListItemIcon>
-                                        <DashboardIcon />
+                                        <HomeIcon />
                                     </ListItemIcon>
                                 </ListItemButton>
                             </ListItem>
@@ -164,10 +175,19 @@ function Layout(props) {
                             </ListItem>
                             <ListItem disablePadding>
                                 <ListItemButton onClick={() => {
+                                    navigate("/kullanici", { replace: true });
+                                }}>
+                                    <ListItemIcon>
+                                        <GroupIcon />
+                                    </ListItemIcon>
+                                </ListItemButton>
+                            </ListItem>
+                            <ListItem disablePadding>
+                                <ListItemButton onClick={() => {
                                     navigate("/kullanici-ekle", { replace: true });
                                 }}>
                                     <ListItemIcon>
-                                        <PersonAddIcon />
+                                        <GroupIcon />
                                     </ListItemIcon>
                                 </ListItemButton>
                             </ListItem>
@@ -176,6 +196,7 @@ function Layout(props) {
                                 <ListItem disablePadding>
                                     <ListItemButton onClick={() => {
                                         localStorage.removeItem("token");
+                                        localStorage.removeItem("authentication");
                                         navigate("/", { replace: true });
                                     }}>
                                         <ListItemIcon>
@@ -202,6 +223,16 @@ function Layout(props) {
                         <KeyboardArrowUpIcon />
                     </Fab>
                 </ScrollTop>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={2000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover />
             </Box>
         )
 
