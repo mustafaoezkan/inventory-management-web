@@ -182,15 +182,6 @@ function Layout(props) {
                                     </ListItemIcon>
                                 </ListItemButton>
                             </ListItem>
-                            <ListItem disablePadding>
-                                <ListItemButton onClick={() => {
-                                    navigate("/kullanici-ekle", { replace: true });
-                                }}>
-                                    <ListItemIcon>
-                                        <GroupIcon />
-                                    </ListItemIcon>
-                                </ListItemButton>
-                            </ListItem>
                             <Divider />
                             <List>
                                 <ListItem disablePadding>
@@ -200,7 +191,7 @@ function Layout(props) {
                                         navigate("/", { replace: true });
                                     }}>
                                         <ListItemIcon>
-                                            <ExitToAppIcon />
+                                            <ExitToAppIcon color='error' />
                                         </ListItemIcon>
                                     </ListItemButton>
                                 </ListItem>
