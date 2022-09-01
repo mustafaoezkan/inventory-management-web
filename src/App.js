@@ -13,7 +13,7 @@ import User from './components/Users/User';
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#00ADB5",
+      main: "#1890ff",
     },
     secondary: {
       main: "#393E46",

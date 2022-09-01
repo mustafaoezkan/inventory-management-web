@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import useUsers from '../../hooks/useUsers'
-import { Button, Input, Modal, Table, Tag } from "antd";
+import { Button, Input, Modal, Table, Tag, Tooltip } from "antd";
 import 'antd/dist/antd.min.css';
-import { Box, IconButton } from '@mui/material';
+import { Card, Grow, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
@@ -260,27 +260,31 @@ function User() {
             render: (_, row) => {
                 return (
                     <>
-                        <IconButton aria-label="Düzenle" onClick={() => {
-                            setId(row.id);
-                            setName(row.ad);
-                            setSurname(row.soyad);
-                            setEmail(row.email);
-                            setPhone(row.telefon);
-                            setRegistrationNumber(row.sicil_no);
-                            setDegree(row.unvan);
-                            setAuthentication(row.yetki);
-                            setMod("edit");
-                            setOpenModal(true);
-                        }}>
-                            <EditIcon color='success' />
-                        </IconButton>
-                        <IconButton aria-label="Sil" onClick={() => {
-                            setId(row.id);
-                            setMod("delete");
-                            setOpenModal(true);
-                        }}>
-                            <DeleteIcon color='error' />
-                        </IconButton>
+                        <Tooltip title="Düzenle">
+                            <IconButton aria-label="Düzenle" onClick={() => {
+                                setId(row.id);
+                                setName(row.ad);
+                                setSurname(row.soyad);
+                                setEmail(row.email);
+                                setPhone(row.telefon);
+                                setRegistrationNumber(row.sicil_no);
+                                setDegree(row.unvan);
+                                setAuthentication(row.yetki);
+                                setMod("edit");
+                                setOpenModal(true);
+                            }}>
+                                <EditIcon color='success' />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Sil">
+                            <IconButton aria-label="Sil" onClick={() => {
+                                setId(row.id);
+                                setMod("delete");
+                                setOpenModal(true);
+                            }}>
+                                <DeleteIcon color='error' />
+                            </IconButton>
+                        </Tooltip>
                     </>
                 )
             }
@@ -289,52 +293,71 @@ function User() {
 
     return (
         <>
-            <Box sx={{
-                width: "100%",
-                height: "100%",
-            }}>
-                <Table columns={columns} dataSource={data} pagination={{
-                    pageSize: 3,
-                    showTotal: (total, range) => `Toplam ${total} kayıt arasından ${range[0]}-${range[1]} arası gösteriliyor.`
+            <Grow in={true}>
+                <Card sx={{
+                    width: '100%',
+                    height: '100%',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: '2rem',
+                }}>
+                    <Table locale={{
+                        emptyText: "Kayıt bulunamadı",
+                        filterConfirm: "Tamam",
+                        filterReset: "Sıfırla",
+                        filterTitle: "Filtrele",
+                        selectAll: "Tümünü seç",
+                        selectInvert: "Seçimi tersine çevir",
+                        sortTitle: "Sırala",
+                        triggerDesc: "Azalan sıralamak için tıklayın",
+                        triggerAsc: "Artan sıralamak için tıklayın",
+                        cancelSort: "Sıralamayı iptal etmek için tıklayın",
+                    }} columns={columns} dataSource={data} pagination={{
+                        pageSize: 4,
+                        showTotal: (total, range) => `Toplam ${total} kayıt arasından ${range[0]}-${range[1]} arası gösteriliyor.`
 
-                }} title={() => {
-                    return (
-                        <>
-                            <div style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                            }}>
-                                <h3>Kullanıcılar</h3>
-                                <Button type="primary" onClick={() => {
-                                    setMod("add");
-                                    setOpenModal(true)
-                                }
-                                }>
-                                    <AddIcon />
-                                </Button>
-                            </div>
-                        </>
-                    )
-                }} />
-                <Modal title={mod === "add" ? "Kişi ekle" : mod === "edit" ? "Kişiyi Düzenle" : "Kişiyi sil"} visible={openModal} onCancel={() => {
-                    setMod("");
-                    setId(0);
-                    setName("");
-                    setSurname("");
-                    setEmail("");
-                    setPhone("");
-                    setRegistrationNumber("");
-                    setDegree("");
-                    setAuthentication("");
-                    setOpenModal(false);
-                }} okButtonProps={{
-                    hidden: true
-                }} cancelButtonProps={{
-                    hidden: true
-                }}  >
-                    <UserModal mod={mod} openModal={openModal} setOpenModal={setOpenModal} userId={id} ad={name} soyad={surname} eposta={email} telefon={phone} sicil_no={registrationNumber} unvan={degree} yetki={authentication} />
-                </Modal>
-            </Box>
+                    }} title={() => {
+                        return (
+                            <>
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                }}>
+                                    <h3>Kullanıcılar</h3>
+                                    <Tooltip title="Yeni kullanıcı ekle">
+                                        <Button type="primary" onClick={() => {
+                                            setMod("add");
+                                            setOpenModal(true)
+                                        }
+                                        }>
+                                            <AddIcon />
+                                        </Button>
+                                    </Tooltip>
+                                </div>
+                            </>
+                        )
+                    }} />
+                    <Modal title={mod === "add" ? "Kişi ekle" : mod === "edit" ? "Kişiyi Düzenle" : "Kişiyi sil"} visible={openModal} onCancel={() => {
+                        setMod("");
+                        setId(0);
+                        setName("");
+                        setSurname("");
+                        setEmail("");
+                        setPhone("");
+                        setRegistrationNumber("");
+                        setDegree("");
+                        setAuthentication("");
+                        setOpenModal(false);
+                    }} okButtonProps={{
+                        hidden: true
+                    }} cancelButtonProps={{
+                        hidden: true
+                    }}  >
+                        <UserModal mod={mod} openModal={openModal} setOpenModal={setOpenModal} userId={id} ad={name} soyad={surname} eposta={email} telefon={phone} sicil_no={registrationNumber} unvan={degree} yetki={authentication} />
+                    </Modal>
+                </Card>
+            </Grow>
         </>
     )
 }

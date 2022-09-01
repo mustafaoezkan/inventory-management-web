@@ -1,6 +1,6 @@
 import { AppBar, Card, Divider, Drawer, Fab, Fade, List, ListItem, ListItemButton, ListItemIcon, Slide, Toolbar, Typography, useScrollTrigger } from '@mui/material';
 import { Box, Container } from '@mui/system';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import InventoryIcon from '@mui/icons-material/Inventory';
@@ -75,12 +75,23 @@ HideOnScroll.propTypes = {
 function Layout(props) {
     const navigate = useNavigate();
     const location = useLocation();
+    const [activeTab, setActiveTab] = React.useState();
 
     document.body.style = "background-color: #f5f5f5;";
 
+    useEffect(() => {
+        if (location.pathname === "/") {
+            setActiveTab(0);
+        } else if (location.pathname === "/kategori") {
+            setActiveTab(1);
+        } else if (location.pathname === "/urun") {
+            setActiveTab(2);
+        } else if (location.pathname === "/kullanici") {
+            setActiveTab(3);
+        }
+    }, [])
+
     return (
-
-
         location.pathname === "/giris" ? (
             <Box sx={{
                 display: 'flex',
@@ -125,7 +136,13 @@ function Layout(props) {
                     <HideOnScroll {...props}>
                         <AppBar position='fixed' sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px`, backgroundColor: "#FFFFFF" }}>
                             <Toolbar>
-                                <Typography variant="h6" noWrap component="div">
+                                <Typography variant="h6" color={"#5d5d5d"} sx={{
+                                    fontWeight: 600,
+                                    ":hover": {
+                                        cursor: "pointer",
+                                        color: "#1890ff",
+                                    }
+                                }} noWrap component="div">
                                     Stok Takip
                                 </Typography>
                             </Toolbar>
@@ -143,42 +160,79 @@ function Layout(props) {
                         variant="permanent"
                         anchor='left'
                     >
-                        <Toolbar />
+                        <img
+                            src={`https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Erciyes_University_logo.svg/1200px-Erciyes_University_logo.svg.png`}
+                            alt="Erciyes Üniversitesi"
+                            style={{
+                                width: "90%",
+                                height: "auto",
+                                padding: "0.6rem",
+                                marginLeft: "0.2rem",
+                            }}
+                        />
                         <Divider />
                         <List>
                             <ListItem disablePadding>
                                 <ListItemButton onClick={() => {
+                                    setActiveTab(0);
                                     navigate("/", { replace: true });
                                 }}>
                                     <ListItemIcon>
-                                        <HomeIcon />
+                                        <HomeIcon sx={{
+                                            color: activeTab === 0 ? "#1890ff" : "#5d5d5d",
+                                            ":hover": {
+                                                cursor: "pointer",
+                                                color: "#1890ff",
+                                            }
+                                        }} />
                                     </ListItemIcon>
                                 </ListItemButton>
                             </ListItem>
                             <ListItem disablePadding>
                                 <ListItemButton onClick={() => {
+                                    setActiveTab(1);
                                     navigate("/kategori", { replace: true });
                                 }}>
                                     <ListItemIcon>
-                                        <CategoryIcon />
+                                        <CategoryIcon sx={{
+                                            color: activeTab === 1 ? "#1890ff" : "#5d5d5d",
+                                            ":hover": {
+                                                cursor: "pointer",
+                                                color: "#1890ff",
+                                            }
+                                        }} />
                                     </ListItemIcon>
                                 </ListItemButton>
                             </ListItem>
                             <ListItem disablePadding>
                                 <ListItemButton onClick={() => {
+                                    setActiveTab(2);
                                     navigate("/urun", { replace: true });
                                 }}>
                                     <ListItemIcon>
-                                        <InventoryIcon />
+                                        <InventoryIcon sx={{
+                                            color: activeTab === 2 ? "#1890ff" : "#5d5d5d",
+                                            ":hover": {
+                                                cursor: "pointer",
+                                                color: "#1890ff",
+                                            }
+                                        }} />
                                     </ListItemIcon>
                                 </ListItemButton>
                             </ListItem>
                             <ListItem disablePadding>
                                 <ListItemButton onClick={() => {
+                                    setActiveTab(3);
                                     navigate("/kullanici", { replace: true });
                                 }}>
                                     <ListItemIcon>
-                                        <GroupIcon />
+                                        <GroupIcon sx={{
+                                            color: activeTab === 3 ? "#1890ff" : "#5d5d5d",
+                                            ":hover": {
+                                                cursor: "pointer",
+                                                color: "#1890ff",
+                                            }
+                                        }} />
                                     </ListItemIcon>
                                 </ListItemButton>
                             </ListItem>

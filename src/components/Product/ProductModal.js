@@ -5,8 +5,11 @@ import { Box, Container } from '@mui/system';
 import { TextField, Typography, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import useProduct from '../../hooks/useProduct';
 import useCategory from "../../hooks/useCategory";
+import {
+    TwitterPicker
+} from "react-color";
 
-function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aciklama, kategori_ismi, setOpenModal }) {
+function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aciklama, kategori_ismi, kategori_id, setOpenModal }) {
     const { postProduct, putProduct, deleteProduct } = useProduct();
     const { getCategories } = useCategory();
 
@@ -17,14 +20,13 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
     const [model, setModel] = useState();
     const [size, setSize] = useState();
     const [color, setColor] = useState();
-    const [status, setStatus] = useState();
+    const [status, setStatus] = useState("Kullanım Dışı");
     const [description, setDescription] = useState();
-    const [category_name, setCategory_name] = useState();
     const [category_id, setCategory_id] = useState(1);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        postProduct(serial_number, brand, model, size, color, status, description, category_name).then(res => {
+        postProduct(serial_number, brand, model, size, color, status, description, category_id).then(res => {
             if (res.status === 201) {
                 setSerial_number('');
                 setBrand('');
@@ -33,7 +35,7 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
                 setColor('');
                 setStatus('');
                 setDescription('');
-                setCategory_name('');
+                setCategory_id('');
                 setOpenModal(false);
                 toast("Ürün eklendi", {
                     type: "info",
@@ -57,16 +59,79 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
     }
 
     const handleUpdate = (e) => {
-
-    }
+        e.preventDefault();
+        putProduct(product_id, serial_number, brand, model, size, color, status, description, category_id).then(res => {
+            if (res.status === 200) {
+                setSerial_number('');
+                setBrand('');
+                setModel('');
+                setSize('');
+                setColor('');
+                setStatus('');
+                setDescription('');
+                setCategory_id('');
+                setOpenModal(false);
+                toast("Ürün güncellendi", {
+                    type: "info",
+                    position: "top-right",
+                    autoClose: 3000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                })
+            } else {
+                toast("Ürün güncellenemdi!", {
+                    type: "error",
+                    position: "top-right",
+                    autoClose: 3000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
+            }
+        })
+    };
 
     const handleDelete = (e) => {
-
+        e.preventDefault();
+        deleteProduct(product_id).then(res => {
+            if (res.status === 204) {
+                setSerial_number('');
+                setBrand('');
+                setModel('');
+                setSize('');
+                setColor('');
+                setStatus('');
+                setDescription('');
+                setCategory_id('');
+                setOpenModal(false);
+                toast("Ürün silindi", {
+                    type: "info",
+                    position: "top-right",
+                    autoClose: 3000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                })
+            } else {
+                toast("Ürün silinemedi!", {
+                    type: "error",
+                    position: "top-right",
+                    autoClose: 3000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
+            }
+        })
     }
 
     const handleChange = (e) => {
         setCategory_id(e.target.value)
-        console.log(category_id);
+    };
+
+    const handleChangeForStatus = (e) => {
+        setStatus(e.target.value)
     };
 
     useEffect(() => {
@@ -89,7 +154,7 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
             setColor(renk);
             setStatus(durum);
             setDescription(aciklama);
-            setCategory_name(kategori_ismi);
+            setCategory_id(kategori_id);
         } else if (mod === "add") {
             setProduct_id('');
             setSerial_number('');
@@ -99,11 +164,11 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
             setColor('');
             setStatus('');
             setDescription('');
-            setCategory_name('');
+            setCategory_id('');
         } else if (mod === "delete") {
             setProduct_id(id);
         }
-    }, [id, seri_no, marka, modeli, boyut, renk, durum, aciklama, kategori_ismi])
+    }, [id, seri_no, marka, modeli, boyut, renk, durum, aciklama, kategori_ismi, kategori_id])
 
     return (
         mod === "add" ? (
@@ -113,6 +178,41 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
                         <Box component={"form"} onSubmit={handleSubmit} noValidate sx={{
                             mt: 1,
                         }}>
+                            <FormControl sx={{
+                                mt: 2,
+                            }} fullWidth>
+                                <InputLabel id="demo-simple-select-label">Kategori</InputLabel>
+                                <Select
+                                    defaultValue={category_id}
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={category_id}
+                                    label="Kategori"
+                                    onChange={handleChange}
+                                >
+                                    {data && data.map((item, index) => {
+                                        return (
+                                            <MenuItem value={item.id}>{item.isim}</MenuItem>
+                                        )
+                                    })}
+                                </Select>
+                            </FormControl>
+                            <FormControl sx={{
+                                mt: 2,
+                            }} fullWidth>
+                                <InputLabel id="demo-simple-select-label">Durum</InputLabel>
+                                <Select
+                                    defaultValue={status}
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={status}
+                                    label="Durum"
+                                    onChange={handleChangeForStatus}
+                                >
+                                    <MenuItem value={"Kullanımda"}>Kullanımda</MenuItem>
+                                    <MenuItem value={"Kullanım Dışı"}>Kullanım Dışı</MenuItem>
+                                </Select>
+                            </FormControl>
                             <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'row',
@@ -181,80 +281,27 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
                                     onChange={(e) => setSize(e.target.value)}
                                 />
                             </Box>
-                            <Box sx={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                            }}>
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    id="renk"
-                                    label="Renk"
-                                    name="renk"
-                                    autoComplete="renk"
-                                    type={"text"}
-                                    autoFocus
-                                    value={color}
-                                    onChange={(e) => setColor(e.target.value)}
-                                    sx={{
-                                        mr: 1,
-                                    }}
-                                />
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    id="durum"
-                                    label="Durum"
-                                    name="durum"
-                                    autoComplete="durum"
-                                    type={"text"}
-                                    autoFocus
-                                    value={status}
-                                    onChange={(e) => setStatus(e.target.value)}
-                                />
-                            </Box>
-                            <Box sx={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                            }}>
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    id="aciklama"
-                                    label="Açıklama"
-                                    name="aciklama"
-                                    autoComplete="aciklama"
-                                    type={"text"}
-                                    autoFocus
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
-                                    sx={{
-                                        mr: 1,
-                                    }}
-                                />
-                                <FormControl sx={{
-                                    mt: 2,
-                                }} fullWidth>
-                                    <InputLabel id="demo-simple-select-label">Kategori</InputLabel>
-                                    <Select
-                                        defaultValue={category_id}
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={category_id}
-                                        label="Kategori"
-                                        onChange={handleChange}
-                                    >
-                                        {data && data.map((item, index) => {
-                                            return (
-                                                <MenuItem value={item.id}>{item.isim}</MenuItem>
-                                            )
-                                        })}
-                                    </Select>
-                                </FormControl>
-                            </Box>
+                            <TextField
+                                margin="normal"
+                                required
+                                multiline
+                                rows={3}
+                                fullWidth
+                                id="aciklama"
+                                label="Açıklama"
+                                name="aciklama"
+                                autoComplete="aciklama"
+                                type={"text"}
+                                autoFocus
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                sx={{
+                                    mr: 1,
+                                    mb: 2
+                                }}
+                            />
+                            <TwitterPicker onChange={(e) => setColor(e.hex)}
+                                colors={["#ff6900", "#fcb900", "#00d084", "#8ed1fc", "#0693e3", "#abb8c3", "#eb144c", "#f78da7", "#9900ef", "#000000", "#ffffff"]} triangle='hide' width='100%' />
                             <Button
                                 type="submit"
                                 fullWidth
@@ -273,6 +320,41 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
                     <Box component={"form"} onSubmit={handleUpdate} noValidate sx={{
                         mt: 1,
                     }}>
+                        <FormControl sx={{
+                            mt: 2,
+                        }} fullWidth>
+                            <InputLabel id="demo-simple-select-label">Kategori</InputLabel>
+                            <Select
+                                defaultValue={category_id}
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={category_id}
+                                label="Kategori"
+                                onChange={handleChange}
+                            >
+                                {data && data.map((item, index) => {
+                                    return (
+                                        <MenuItem value={item.id}>{item.isim}</MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+                        <FormControl sx={{
+                            mt: 2,
+                        }} fullWidth>
+                            <InputLabel id="demo-simple-select-label">Durum</InputLabel>
+                            <Select
+                                defaultValue={status}
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={status}
+                                label="Durum"
+                                onChange={handleChangeForStatus}
+                            >
+                                <MenuItem value={"Kullanımda"}>Kullanımda</MenuItem>
+                                <MenuItem value={"Kullanım Dışı"}>Kullanım Dışı</MenuItem>
+                            </Select>
+                        </FormControl>
                         <Box sx={{
                             display: 'flex',
                             flexDirection: 'row',
@@ -341,74 +423,27 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
                                 onChange={(e) => setSize(e.target.value)}
                             />
                         </Box>
-                        <Box sx={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                        }}>
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="renk"
-                                label="Renk"
-                                name="renk"
-                                autoComplete="renk"
-                                type={"text"}
-                                autoFocus
-                                value={color}
-                                onChange={(e) => setColor(e.target.value)}
-                                sx={{
-                                    mr: 1,
-                                }}
-                            />
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="durum"
-                                label="Durum"
-                                name="durum"
-                                autoComplete="durum"
-                                type={"text"}
-                                autoFocus
-                                value={status}
-                                onChange={(e) => setStatus(e.target.value)}
-                            />
-                        </Box>
-                        <Box sx={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                        }}>
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="aciklama"
-                                label="Açıklama"
-                                name="aciklama"
-                                autoComplete="aciklama"
-                                type={"text"}
-                                autoFocus
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                sx={{
-                                    mr: 1,
-                                }}
-                            />
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="kategori_ismi"
-                                label="Kategori İsmi"
-                                name="kategori_ismi"
-                                autoComplete="kategori_ismi"
-                                type={"text"}
-                                autoFocus
-                                value={category_name}
-                                onChange={(e) => setCategory_name(e.target.value)}
-                            />
-                        </Box>
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            multiline
+                            rows={3}
+                            id="aciklama"
+                            label="Açıklama"
+                            name="aciklama"
+                            autoComplete="aciklama"
+                            type={"text"}
+                            autoFocus
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            sx={{
+                                mr: 1,
+                                mb: 2
+                            }}
+                        />
+                        <TwitterPicker onChange={(e) => setColor(e.hex)}
+                            colors={["#ff6900", "#fcb900", "#00d084", "#8ed1fc", "#0693e3", "#abb8c3", "#eb144c", "#f78da7", "#9900ef", "#000000", "#ffffff"]} triangle='hide' width='100%' />
                         <Button
                             type="submit"
                             fullWidth

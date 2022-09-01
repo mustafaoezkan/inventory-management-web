@@ -10,7 +10,7 @@ const useProduct = () => {
         }
     }
 
-    const postProduct = async (seri_no, marka, model, boyut, renk, durum, aciklama, kategori_ismi) => {
+    const postProduct = async (seri_no, marka, model, boyut, renk, durum, aciklama, kategori_id) => {
         try {
             const response = await axios.post("urun", {
                 seri_no,
@@ -20,7 +20,7 @@ const useProduct = () => {
                 renk,
                 durum,
                 aciklama,
-                kategori_ismi
+                kategori_id
             });
             return response;
         } catch (err) {
