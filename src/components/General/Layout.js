@@ -1,4 +1,4 @@
-import { AppBar, Card, Divider, Drawer, Fab, Fade, List, ListItem, ListItemButton, ListItemIcon, Slide, Toolbar, Typography, useScrollTrigger } from '@mui/material';
+import { AppBar, Card, Divider, Drawer, Fab, Fade, List, ListItem, ListItemButton, ListItemIcon, Slide, Toolbar, Tooltip, Typography, useScrollTrigger } from '@mui/material';
 import { Box, Container } from '@mui/system';
 import React, { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
@@ -11,7 +11,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { ToastContainer } from 'react-toastify';
 
-const drawerWidth = 73;
+const drawerWidth = 100;
 
 function HideOnScroll(props) {
     const { children, window } = props;
@@ -89,7 +89,9 @@ function Layout(props) {
         } else if (location.pathname === "/kullanici") {
             setActiveTab(3);
         }
-    }, [])
+    }, [location])
+
+    useEffect(() => { }, [location]);
 
     return (
         location.pathname === "/giris" ? (
@@ -100,21 +102,7 @@ function Layout(props) {
                 height: '90vh',
                 backgroundColor: '#f5f5f5',
             }}>
-                <Card sx={{
-                    display: 'flex',
-                    justifyItems: 'center',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '50vh',
-                    width: '50vw',
-                    background: "rgba(0,0,0,0)",
-                    textAlign: 'center',
-                    padding: '1rem',
-                    border: '1px solid #000',
-                    boxShadow: '0px 0px 10px #000',
-                }} >
-                    <Outlet />
-                </Card>
+                <Outlet />
                 <ToastContainer
                     position="top-right"
                     autoClose={2000}
@@ -134,7 +122,7 @@ function Layout(props) {
             <Box >
                 <Container fixed>
                     <HideOnScroll {...props}>
-                        <AppBar position='fixed' sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px`, backgroundColor: "#FFFFFF" }}>
+                        <AppBar position='fixed' sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px`, height: "88px", backgroundColor: "#FFFFFF", padding: "12px" }}>
                             <Toolbar>
                                 <Typography variant="h6" color={"#5d5d5d"} sx={{
                                     fontWeight: 600,
@@ -143,7 +131,7 @@ function Layout(props) {
                                         color: "#1890ff",
                                     }
                                 }} noWrap component="div">
-                                    Stok Takip
+                                    Bilgi İşlem Daire Başkanlığı Stok Takip Uygulaması
                                 </Typography>
                             </Toolbar>
                         </AppBar>
@@ -172,81 +160,91 @@ function Layout(props) {
                         />
                         <Divider />
                         <List>
-                            <ListItem disablePadding>
+                            <ListItem >
                                 <ListItemButton onClick={() => {
                                     setActiveTab(0);
                                     navigate("/", { replace: true });
                                 }}>
-                                    <ListItemIcon>
-                                        <HomeIcon sx={{
-                                            color: activeTab === 0 ? "#1890ff" : "#5d5d5d",
-                                            ":hover": {
-                                                cursor: "pointer",
-                                                color: "#1890ff",
-                                            }
-                                        }} />
-                                    </ListItemIcon>
+                                    <Tooltip title="Anasayfa" placement="right">
+                                        <ListItemIcon>
+                                            <HomeIcon sx={{
+                                                color: activeTab === 0 ? "#1890ff" : "#5d5d5d",
+                                                ":hover": {
+                                                    cursor: "pointer",
+                                                    color: "#1890ff",
+                                                }
+                                            }} />
+                                        </ListItemIcon>
+                                    </Tooltip>
                                 </ListItemButton>
                             </ListItem>
-                            <ListItem disablePadding>
+                            <ListItem >
                                 <ListItemButton onClick={() => {
                                     setActiveTab(1);
                                     navigate("/kategori", { replace: true });
                                 }}>
-                                    <ListItemIcon>
-                                        <CategoryIcon sx={{
-                                            color: activeTab === 1 ? "#1890ff" : "#5d5d5d",
-                                            ":hover": {
-                                                cursor: "pointer",
-                                                color: "#1890ff",
-                                            }
-                                        }} />
-                                    </ListItemIcon>
+                                    <Tooltip title="Kategoriler" placement="right">
+                                        <ListItemIcon>
+                                            <CategoryIcon sx={{
+                                                color: activeTab === 1 ? "#1890ff" : "#5d5d5d",
+                                                ":hover": {
+                                                    cursor: "pointer",
+                                                    color: "#1890ff",
+                                                }
+                                            }} />
+                                        </ListItemIcon>
+                                    </Tooltip>
                                 </ListItemButton>
                             </ListItem>
-                            <ListItem disablePadding>
+                            <ListItem >
                                 <ListItemButton onClick={() => {
                                     setActiveTab(2);
                                     navigate("/urun", { replace: true });
                                 }}>
-                                    <ListItemIcon>
-                                        <InventoryIcon sx={{
-                                            color: activeTab === 2 ? "#1890ff" : "#5d5d5d",
-                                            ":hover": {
-                                                cursor: "pointer",
-                                                color: "#1890ff",
-                                            }
-                                        }} />
-                                    </ListItemIcon>
+                                    <Tooltip title="Ürünler" placement="right">
+                                        <ListItemIcon>
+                                            <InventoryIcon sx={{
+                                                color: activeTab === 2 ? "#1890ff" : "#5d5d5d",
+                                                ":hover": {
+                                                    cursor: "pointer",
+                                                    color: "#1890ff",
+                                                }
+                                            }} />
+                                        </ListItemIcon>
+                                    </Tooltip>
                                 </ListItemButton>
                             </ListItem>
-                            <ListItem disablePadding>
+                            <ListItem >
                                 <ListItemButton onClick={() => {
                                     setActiveTab(3);
                                     navigate("/kullanici", { replace: true });
                                 }}>
-                                    <ListItemIcon>
-                                        <GroupIcon sx={{
-                                            color: activeTab === 3 ? "#1890ff" : "#5d5d5d",
-                                            ":hover": {
-                                                cursor: "pointer",
-                                                color: "#1890ff",
-                                            }
-                                        }} />
-                                    </ListItemIcon>
+                                    <Tooltip title="Kullanıcılar" placement="right">
+                                        <ListItemIcon>
+                                            <GroupIcon sx={{
+                                                color: activeTab === 3 ? "#1890ff" : "#5d5d5d",
+                                                ":hover": {
+                                                    cursor: "pointer",
+                                                    color: "#1890ff",
+                                                }
+                                            }} />
+                                        </ListItemIcon>
+                                    </Tooltip>
                                 </ListItemButton>
                             </ListItem>
                             <Divider />
                             <List>
-                                <ListItem disablePadding>
+                                <ListItem >
                                     <ListItemButton onClick={() => {
                                         localStorage.removeItem("token");
                                         localStorage.removeItem("authentication");
                                         navigate("/", { replace: true });
                                     }}>
-                                        <ListItemIcon>
-                                            <ExitToAppIcon color='error' />
-                                        </ListItemIcon>
+                                        <Tooltip title="Çıkış Yap" placement="right">
+                                            <ListItemIcon>
+                                                <ExitToAppIcon color='error' />
+                                            </ListItemIcon>
+                                        </Tooltip>
                                     </ListItemButton>
                                 </ListItem>
                             </List>
@@ -255,7 +253,7 @@ function Layout(props) {
                     <Box
                         component="main"
                         sx={{
-                            p: 3,
+                            mt: 10,
                             display: 'flex',
                             backgroundColor: '#f5f5f5',
                         }}

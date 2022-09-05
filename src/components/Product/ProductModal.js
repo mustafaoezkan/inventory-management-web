@@ -5,6 +5,7 @@ import { Box, Container } from '@mui/system';
 import { TextField, Typography, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import useProduct from '../../hooks/useProduct';
 import useCategory from "../../hooks/useCategory";
+import useAssignment from '../../hooks/useAssignment';
 import {
     TwitterPicker
 } from "react-color";
@@ -12,6 +13,7 @@ import {
 function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aciklama, kategori_ismi, kategori_id, setOpenModal }) {
     const { postProduct, putProduct, deleteProduct } = useProduct();
     const { getCategories } = useCategory();
+    const { postAssignment } = useAssignment();
 
     const [data, setData] = useState();
     const [product_id, setProduct_id] = useState();
@@ -19,14 +21,16 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
     const [brand, setBrand] = useState();
     const [model, setModel] = useState();
     const [size, setSize] = useState();
-    const [color, setColor] = useState();
+    const [color, setColor] = useState("#000000");
     const [status, setStatus] = useState("Kullanım Dışı");
     const [description, setDescription] = useState();
+    const [descForAssign, setDescForAssign] = useState();
     const [category_id, setCategory_id] = useState(1);
+    const [assigned_person, setAssigned_person] = useState();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        postProduct(serial_number, brand, model, size, color, status, description, category_id).then(res => {
+        postProduct(serial_number, brand, model, size, color, description, category_id).then(res => {
             if (res.status === 201) {
                 setSerial_number('');
                 setBrand('');
@@ -126,12 +130,49 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
         })
     }
 
+    const handleAssignment = (e) => {
+        e.preventDefault();
+        postAssignment(product_id, assigned_person, descForAssign).then(res => {
+            if (res.status === 201) {
+                putProduct(product_id, serial_number, brand, model, size, color, "Tahsis edilmiş", description, category_id).then(res => {
+                    if (res.status === 200) {
+                        setSerial_number('');
+                        setBrand('');
+                        setModel('');
+                        setSize('');
+                        setColor('');
+                        setStatus('');
+                        setDescription('');
+                        setCategory_id('');
+                        setOpenModal(false);
+                        toast(`Ürün ${assigned_person} kişisine tahsis edildi.`, {
+                            type: "info",
+                            position: "top-right",
+                            autoClose: 3000,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                        })
+                        setDescForAssign('');
+                        setAssigned_person('');
+                    } else {
+                        toast("Ürün atanamadı!", {
+                            type: "error",
+                            position: "top-right",
+                            autoClose: 3000,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                        });
+                    }
+                })
+            }
+        }
+        )
+    }
+
     const handleChange = (e) => {
         setCategory_id(e.target.value)
-    };
-
-    const handleChangeForStatus = (e) => {
-        setStatus(e.target.value)
     };
 
     useEffect(() => {
@@ -161,12 +202,22 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
             setBrand('');
             setModel('');
             setSize('');
-            setColor('');
+            setColor('#000000');
             setStatus('');
             setDescription('');
             setCategory_id('');
         } else if (mod === "delete") {
             setProduct_id(id);
+        } else if (mod === "assign") {
+            setProduct_id(id);
+            setSerial_number(seri_no);
+            setBrand(marka);
+            setModel(modeli);
+            setSize(boyut);
+            setColor(renk);
+            setStatus(durum);
+            setDescription(aciklama);
+            setCategory_id(kategori_id);
         }
     }, [id, seri_no, marka, modeli, boyut, renk, durum, aciklama, kategori_ismi, kategori_id])
 
@@ -195,22 +246,6 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
                                             <MenuItem value={item.id}>{item.isim}</MenuItem>
                                         )
                                     })}
-                                </Select>
-                            </FormControl>
-                            <FormControl sx={{
-                                mt: 2,
-                            }} fullWidth>
-                                <InputLabel id="demo-simple-select-label">Durum</InputLabel>
-                                <Select
-                                    defaultValue={status}
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={status}
-                                    label="Durum"
-                                    onChange={handleChangeForStatus}
-                                >
-                                    <MenuItem value={"Kullanımda"}>Kullanımda</MenuItem>
-                                    <MenuItem value={"Kullanım Dışı"}>Kullanım Dışı</MenuItem>
                                 </Select>
                             </FormControl>
                             <Box sx={{
@@ -300,7 +335,7 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
                                     mb: 2
                                 }}
                             />
-                            <TwitterPicker onChange={(e) => setColor(e.hex)}
+                            <TwitterPicker defaultValue={color} onChange={(e) => setColor(e.hex)}
                                 colors={["#ff6900", "#fcb900", "#00d084", "#8ed1fc", "#0693e3", "#abb8c3", "#eb144c", "#f78da7", "#9900ef", "#000000", "#ffffff"]} triangle='hide' width='100%' />
                             <Button
                                 type="submit"
@@ -337,22 +372,6 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
                                         <MenuItem value={item.id}>{item.isim}</MenuItem>
                                     )
                                 })}
-                            </Select>
-                        </FormControl>
-                        <FormControl sx={{
-                            mt: 2,
-                        }} fullWidth>
-                            <InputLabel id="demo-simple-select-label">Durum</InputLabel>
-                            <Select
-                                defaultValue={status}
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={status}
-                                label="Durum"
-                                onChange={handleChangeForStatus}
-                            >
-                                <MenuItem value={"Kullanımda"}>Kullanımda</MenuItem>
-                                <MenuItem value={"Kullanım Dışı"}>Kullanım Dışı</MenuItem>
                             </Select>
                         </FormControl>
                         <Box sx={{
@@ -455,7 +474,7 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
                     </Box>
                 </Container>
             </>
-        ) : (
+        ) : mod === "delete" ? (
             <>
                 <Container>
                     <Typography variant="h6" gutterBottom>
@@ -486,6 +505,58 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
                                 setOpenModal(false);
                             }}>
                             Hayır
+                        </Button>
+                    </Box>
+                </Container>
+            </>
+        ) : (
+            <>
+                <Container>
+                    <Box component={"form"} onSubmit={handleAssignment} noValidate sx={{
+                        mt: 1,
+                    }}>
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="tahsis_edilen_kisi"
+                            label="Tahsis edilen kişi"
+                            name="tahsis_edilen_kisi"
+                            autoComplete="tahsis_edilen_kisi"
+                            type={"text"}
+                            autoFocus
+                            value={assigned_person}
+                            onChange={(e) => setAssigned_person(e.target.value)}
+                            sx={{
+                                mr: 1,
+                            }}
+                        />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            multiline
+                            rows={3}
+                            id="aciklama"
+                            label="Açıklama"
+                            name="aciklama"
+                            autoComplete="aciklama"
+                            type={"text"}
+                            autoFocus
+                            value={descForAssign}
+                            onChange={(e) => setDescForAssign(e.target.value)}
+                            sx={{
+                                mr: 1,
+                                mb: 2
+                            }}
+                        />
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            Tahsis et
                         </Button>
                     </Box>
                 </Container>

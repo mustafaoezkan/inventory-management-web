@@ -10,6 +10,24 @@ const useCategory = () => {
         }
     }
 
+    const getNotAssignCategoriesCount = async () => {
+        try {
+            const response = await axios.get('kategori/tahsis-edilmemis');
+            return response;
+        } catch (err) {
+            return err.response;
+        }
+    }
+
+    const getAssignCategoriesCount = async () => {
+        try {
+            const response = await axios.get("kategori/tahsis-edilmis");
+            return response;
+        } catch (err) {
+            return err.response;
+        }
+    }
+
     const postCategory = async (isim) => {
         try {
             const response = await axios.post('kategori', {
@@ -41,7 +59,7 @@ const useCategory = () => {
         }
     }
 
-    return { getCategories, postCategory, putCategory, deleteCategory };
+    return { getCategories, getAssignCategoriesCount, getNotAssignCategoriesCount, postCategory, putCategory, deleteCategory };
 }
 
 export default useCategory;

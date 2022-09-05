@@ -3,6 +3,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { Card, Grow, IconButton } from '@mui/material';
 import { Button, Input, Modal, Table, Tooltip, Tag } from 'antd';
 import 'antd/dist/antd.min.css';
@@ -108,78 +109,6 @@ function Product() {
             sortDirections: ["ascend", "descend"],
         },
         {
-            title: "Model",
-            dataIndex: "model",
-            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
-                return (
-                    <>
-                        <div style={{
-                            display: 'flex',
-                        }}>
-                            <Input autoFocus placeholder='Arama yap'
-                                value={selectedKeys[0]}
-                                onChange={(e) => {
-                                    setSelectedKeys(e.target.value ? [e.target.value] : []);
-                                    confirm({ closeDropdown: false });
-                                }} onPressEnter={() => {
-                                    confirm()
-                                }}
-                                onBlur={() => {
-                                    confirm()
-                                }}
-                            />
-                            <Button icon={<DeleteIcon />} onClick={() => { clearFilters(); confirm(); }} type="danger" />
-                        </div>
-                    </>
-                );
-            },
-            filterIcon: () => {
-                return <SearchIcon />;
-            },
-            onFilter: (value, record) => {
-                return record.model.toLowerCase().includes(value.toLowerCase());
-            },
-            key: "isim",
-            sorter: (a, b) => a.model.localeCompare(b.model),
-            sortDirections: ["ascend", "descend"],
-        },
-        {
-            title: "Boyut",
-            dataIndex: "boyut",
-            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
-                return (
-                    <>
-                        <div style={{
-                            display: 'flex',
-                        }}>
-                            <Input autoFocus placeholder='Arama yap'
-                                value={selectedKeys[0]}
-                                onChange={(e) => {
-                                    setSelectedKeys(e.target.value ? [e.target.value] : []);
-                                    confirm({ closeDropdown: false });
-                                }} onPressEnter={() => {
-                                    confirm()
-                                }}
-                                onBlur={() => {
-                                    confirm()
-                                }}
-                            />
-                            <Button icon={<DeleteIcon />} onClick={() => { clearFilters(); confirm(); }} type="danger" />
-                        </div>
-                    </>
-                );
-            },
-            filterIcon: () => {
-                return <SearchIcon />;
-            },
-            onFilter: (value, record) => {
-                return record.boyut.toLowerCase().includes(value.toLowerCase());
-            },
-            key: "isim",
-            sorter: (a, b) => a.boyut.localeCompare(b.boyut),
-            sortDirections: ["ascend", "descend"],
-        },
-        {
             title: "Renk",
             dataIndex: "renk",
             render: (text) => {
@@ -196,7 +125,7 @@ function Product() {
             title: "Durum",
             dataIndex: "durum",
             render: (text) => {
-                if (text === "Kullanımda") {
+                if (text === "Tahsis edilmiş") {
                     return (
                         <Tag color="red">{text}</Tag>
                     )
@@ -240,42 +169,6 @@ function Product() {
             sortDirections: ["ascend", "descend"],
         },
         {
-            title: "Açıklama",
-            dataIndex: "aciklama",
-            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
-                return (
-                    <>
-                        <div style={{
-                            display: 'flex',
-                        }}>
-                            <Input autoFocus placeholder='Arama yap'
-                                value={selectedKeys[0]}
-                                onChange={(e) => {
-                                    setSelectedKeys(e.target.value ? [e.target.value] : []);
-                                    confirm({ closeDropdown: false });
-                                }} onPressEnter={() => {
-                                    confirm()
-                                }}
-                                onBlur={() => {
-                                    confirm()
-                                }}
-                            />
-                            <Button icon={<DeleteIcon />} onClick={() => { clearFilters(); confirm(); }} type="danger" />
-                        </div>
-                    </>
-                );
-            },
-            filterIcon: () => {
-                return <SearchIcon />;
-            },
-            onFilter: (value, record) => {
-                return record.aciklama.toLowerCase().includes(value.toLowerCase());
-            },
-            key: "isim",
-            sorter: (a, b) => a.aciklama.localeCompare(b.aciklama),
-            sortDirections: ["ascend", "descend"],
-        },
-        {
             title: "Kategori İsmi",
             dataIndex: "kategori_ismi",
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
@@ -316,7 +209,10 @@ function Product() {
             key: "action",
             render: (_, row) => {
                 return (
-                    <>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                    }}>
                         <Tooltip title="Düzenle">
                             <IconButton aria-label="Düzenle" onClick={() => {
                                 setId(row.id);
@@ -335,16 +231,48 @@ function Product() {
                                 <EditIcon color='success' />
                             </IconButton>
                         </Tooltip>
-                        <Tooltip title="Sil">
-                            <IconButton aria-label="Sil" onClick={() => {
-                                setId(row.id);
-                                setMod("delete");
-                                setOpenModal(true);
-                            }}>
-                                <DeleteIcon color='error' />
+                        {row.durum === "Tahsis edilmiş" ? (
+                            <IconButton aria-label="Sil" disabled>
+                                <DeleteIcon color="disabled" />
                             </IconButton>
-                        </Tooltip>
-                    </>
+                        ) : (
+                            <Tooltip title="Sil">
+                                <IconButton aria-label="Sil" onClick={() => {
+                                    setId(row.id);
+                                    setMod("delete");
+                                    setOpenModal(true);
+                                }}>
+                                    <DeleteIcon color='error' />
+                                </IconButton>
+                            </Tooltip>
+                        )}
+                        {row.durum === "Tahsis edilmiş" ? (
+                            <IconButton disabled aria-label="Tahsis Et" onClick={() => {
+
+                            }}>
+                                <AccountBoxIcon color='disabled' />
+                            </IconButton>
+                        ) : (
+                            <Tooltip title="Tahsis Et">
+                                <IconButton aria-label="Tahsis Et" onClick={() => {
+                                    setId(row.id);
+                                    setSerialNumber(row.seri_no);
+                                    setBrand(row.marka);
+                                    setModel(row.model);
+                                    setSize(row.boyut);
+                                    setColor(row.renk);
+                                    setStatus(row.durum);
+                                    setDescription(row.aciklama);
+                                    setCategoryName(row.kategori_ismi);
+                                    setCategoryId(row.kategori_id);
+                                    setMod("assign");
+                                    setOpenModal(true);
+                                }}>
+                                    <AccountBoxIcon color='primary' />
+                                </IconButton>
+                            </Tooltip>
+                        )}
+                    </div>
                 )
             }
         }
@@ -361,7 +289,14 @@ function Product() {
                 padding: '2rem',
 
             }}>
-                <Table locale={{
+                <Table onRow={(record, rowIndex) => {
+                    return {
+                        onClick: event => {
+                            console.log(record)
+                            console.log(rowIndex)
+                        },
+                    }
+                }} locale={{
                     emptyText: "Kayıt bulunamadı",
                     filterConfirm: "Tamam",
                     filterReset: "Sıfırla",
@@ -397,7 +332,7 @@ function Product() {
                         </>
                     )
                 }} />
-                <Modal title={mod === "add" ? "Ürün ekle" : mod === "edit" ? "Ürünü düzenle" : "Ürünü sil"} visible={openModal} onCancel={() => {
+                <Modal title={mod === "add" ? "Ürün ekle" : mod === "edit" ? "Ürünü düzenle" : mod === "delete" ? "Ürünü sil" : "Ürünü tahsis et"} visible={openModal} onCancel={() => {
                     setMod("");
                     setId(0);
                     setSerialNumber("");

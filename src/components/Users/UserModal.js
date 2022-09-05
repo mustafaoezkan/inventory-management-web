@@ -4,6 +4,7 @@ import useRegistration from '../../hooks/useRegistration'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useUsers from '../../hooks/useUsers';
+import emailjs from "@emailjs/browser";
 
 function UserModal({ mod, openModal, setOpenModal, userId, ad, soyad, eposta, telefon, sicil_no, unvan, yetki }) {
     const { registration } = useRegistration()
@@ -24,6 +25,12 @@ function UserModal({ mod, openModal, setOpenModal, userId, ad, soyad, eposta, te
         e.preventDefault()
         registration(username, password, name, surname, email, number, registrationNumber, degree, authentication).then(res => {
             if (res.status === 201) {
+                emailjs.sendForm("service_bcw6jsn", "template_wfjzbh3", e.target, "Uu3D_NsCtJuSlIPmW")
+                    .then((result) => {
+                        console.log(result.text);
+                    }, (error) => {
+                        console.log(error.text);
+                    })
                 setUsername('')
                 setPassword('')
                 setName('')
@@ -295,7 +302,7 @@ function UserModal({ mod, openModal, setOpenModal, userId, ad, soyad, eposta, te
                                 onChange={handleChange}
                             >
                                 <MenuItem value={"Admin"}>Admin</MenuItem>
-                                <MenuItem value={"Kullanici"}>Kullanıcı</MenuItem>
+                                <MenuItem value={"Kullanıcı"}>Kullanıcı</MenuItem>
                             </Select>
                         </FormControl>
                         <Button
@@ -422,7 +429,7 @@ function UserModal({ mod, openModal, setOpenModal, userId, ad, soyad, eposta, te
                                 onChange={handleChange}
                             >
                                 <MenuItem value={"Admin"}>Admin</MenuItem>
-                                <MenuItem value={"Kullanici"}>Kullanıcı</MenuItem>
+                                <MenuItem value={"Kullanıcı"}>Kullanıcı</MenuItem>
                             </Select>
                         </FormControl>
                         <Button

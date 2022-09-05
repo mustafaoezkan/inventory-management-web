@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -7,7 +6,6 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import useLogin from '../../hooks/useLogin';
@@ -15,6 +13,18 @@ import { toast } from 'react-toastify';
 import { useNavigate, useLocation } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 
+function Copyright(props) {
+    return (
+        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+            {'Copyright © '}
+            <Link color="inherit" href="https://bidb.erciyes.edu.tr/">
+                Erciyes Üniversitesi Bilgi İşlem Daire Başkanlığı
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
+}
 
 export default function SignIn() {
 
@@ -65,10 +75,16 @@ export default function SignIn() {
                     alignItems: 'center',
                 }}
             >
-                <Avatar sx={{ m: 1, bgcolor: '#1890ff' }}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
+                {/* <LockOutlinedIcon /> */}
+                <img
+                    src="https://i.hizliresim.com/2mlhjih.png"
+                    alt="Erciyes Üniversitesi"
+                    style={{
+                        width: "200px",
+                        height: "auto",
+                    }}
+                />
+                <Typography sx={{ mt: 2 }} component="h1" variant="h5">
                     Giriş Yap
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -121,6 +137,7 @@ export default function SignIn() {
                     </Button>
                 </Box>
             </Box>
+            <Copyright sx={{ mt: 2, mb: 1 }} />
         </Container>
     );
 }

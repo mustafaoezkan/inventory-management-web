@@ -1,5 +1,5 @@
-import { Card, Collapse, Grow, IconButton } from '@mui/material';
-import { Button, Input, Modal, Table, Tooltip } from 'antd';
+import { Card, Grow, IconButton } from '@mui/material';
+import { Button, Input, Modal, Table, Tag, Tooltip } from 'antd';
 import 'antd/dist/antd.min.css';
 import React, { useEffect, useState } from 'react'
 import useCategory from '../../hooks/useCategory';
@@ -8,10 +8,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import CategoryModal from './CategoryModal';
+import { Box } from '@mui/system';
 
 function Category() {
-    const { getCategories } = useCategory();
-    const [data, setData] = useState();
+    const { getCategories, getAssignCategoriesCount, getNotAssignCategoriesCount } = useCategory();
+    const [assigned, setAssigned] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [notAssigned, setNotAssigned] = useState([]);
+    const [totalArray, setTotalArray] = useState([]);
+    const [tamTotal, setTamTotal] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [mod, setMod] = useState();
     const [id, setId] = useState();
@@ -19,17 +24,52 @@ function Category() {
 
     useEffect(() => {
         getCategories().then(res => {
-            setData(res.data)
+            setCategories(res.data)
         })
+        getAssignCategoriesCount().then(res => {
+            setAssigned(res.data)
+        })
+        getNotAssignCategoriesCount().then(res => {
+            setNotAssigned(res.data)
+        })
+
     }, [openModal]);
 
-    useEffect(() => { }, [data, mod, id, name]);
+    useEffect(() => {
+        mergeArrays();
+        mergeOtherArrays();
+    }, [categories, totalArray, tamTotal]);
+
+    useEffect(() => {
+    }, [categories, mod, id, name, assigned, notAssigned, totalArray, tamTotal]);
+
+    useEffect(() => {
+
+    }, [])
+
+    const mergeArrays = async () => {
+        setTotalArray(
+            categories.map((itemA) => ({
+                ...itemA,
+                ...assigned.find((itemB) => itemB.id === itemA.id),
+            }))
+        );
+    }
+
+    const mergeOtherArrays = async () => {
+        setTamTotal(
+            totalArray.map((itemA) => ({
+                ...itemA,
+                ...notAssigned.find((itemB) => itemB.id === itemA.id),
+            }))
+        );
+    }
 
     const columns = [
         {
             title: "İsim",
             dataIndex: "isim",
-            width: "85%",
+            width: "40%",
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
                 return (
                     <>
@@ -64,30 +104,104 @@ function Category() {
             sortDirections: ["ascend", "descend"],
         },
         {
+            title: "Tahsis edilmiş ürün sayısı",
+            dataIndex: "tahsis_edilmis_urun_sayisi",
+            width: "20%",
+            render: (text, record) => {
+                return (
+                    record.tahsis_edilmis_urun_sayisi ? (
+                        <Tag color="yellow">
+                            <Tooltip title="Tahsis edilmiş ürün sayısı">
+                                <span>{record.tahsis_edilmis_urun_sayisi}</span>
+                            </Tooltip>
+                        </Tag>
+                    ) : (
+                        <Tag color='yellow'>
+                            <Tooltip title="Tahsis edilmiş ürün sayısı">
+                                <span>0</span>
+                            </Tooltip>
+                        </Tag>
+                    )
+
+                )
+            },
+            key: "tahsis_edilmis_urun_sayisi",
+        },
+        {
+            title: "Tahsis edilmemiş ürün sayısı",
+            dataIndex: "tahsis_edilmemis_urun_sayisi",
+            width: "20%",
+            render: (text, record) => {
+                return (
+                    record.tahsis_edilmemis_urun_sayisi ? (
+                        <Tag color='blue'>
+                            <Tooltip title="Tahsis edilmemiş ürün sayısı">
+                                <span>{record.tahsis_edilmemis_urun_sayisi}</span>
+                            </Tooltip>
+                        </Tag>
+
+                    ) : (
+                        <Tag color="blue">
+                            <Tooltip title="Tahsis edilmemiş ürün sayısı">
+                                <span>0</span>
+                            </Tooltip>
+                        </Tag>
+                    )
+
+                )
+            },
+            key: "tahsis_edilmis_urun_sayisi",
+        },
+        {
+            title: "Toplam ürün sayısı",
+            width: "20%",
+            render: (text, record) => {
+                if (record.tahsis_edilmemis_urun_sayisi === undefined) {
+                    record.tahsis_edilmemis_urun_sayisi = 0;
+                }
+                if (record.tahsis_edilmis_urun_sayisi === undefined) {
+                    record.tahsis_edilmis_urun_sayisi = 0;
+                }
+                return (
+                    <Tag color="green">
+                        <Tooltip title="Toplam ürün sayısı">
+                            <span>{+record.tahsis_edilmemis_urun_sayisi + +record.tahsis_edilmis_urun_sayisi}</span>
+                        </Tooltip>
+                    </Tag>
+                )
+            },
+            key: "tahsis_edilmis_urun_sayisi",
+        },
+        {
             title: "İşlemler",
             key: "action",
             render: (_, row) => {
                 return (
                     <>
-                        <Tooltip title="Düzenle">
-                            <IconButton aria-label="Düzenle" onClick={() => {
-                                setId(row.id);
-                                setName(row.isim);
-                                setMod("edit");
-                                setOpenModal(true);
-                            }}>
-                                <EditIcon color='success' />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Sil">
-                            <IconButton aria-label="Sil" onClick={() => {
-                                setId(row.id);
-                                setMod("delete");
-                                setOpenModal(true);
-                            }}>
-                                <DeleteIcon color='error' />
-                            </IconButton>
-                        </Tooltip>
+                        <Box sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }} >
+                            <Tooltip title="Düzenle">
+                                <IconButton aria-label="Düzenle" onClick={() => {
+                                    setId(row.id);
+                                    setName(row.isim);
+                                    setMod("edit");
+                                    setOpenModal(true);
+                                }}>
+                                    <EditIcon color='success' />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Sil">
+                                <IconButton aria-label="Sil" onClick={() => {
+                                    setId(row.id);
+                                    setMod("delete");
+                                    setOpenModal(true);
+                                }}>
+                                    <DeleteIcon color='error' />
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
                     </>
                 )
             }
@@ -116,7 +230,7 @@ function Category() {
                     triggerDesc: "Azalan sıralamak için tıklayın",
                     triggerAsc: "Artan sıralamak için tıklayın",
                     cancelSort: "Sıralamayı iptal etmek için tıklayın",
-                }} columns={columns} dataSource={data} pagination={{
+                }} columns={columns} dataSource={tamTotal} pagination={{
                     pageSize: 4,
                     showTotal: (total, range) => `Toplam ${total} kayıt arasından ${range[0]}-${range[1]} arası gösteriliyor.`
 

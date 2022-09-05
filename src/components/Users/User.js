@@ -247,7 +247,7 @@ function User() {
             render: (text) => {
                 if (text === "Admin") {
                     return <Tag color="success">Admin</Tag>
-                } else if (text === "Kullanici") {
+                } else if (text === "Kullanıcı") {
                     return <Tag color="warning">Kullanıcı</Tag>
                 } else {
                     return <Tag color="default">-</Tag>
