@@ -537,10 +537,10 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
                             fullWidth
                             multiline
                             rows={3}
-                            id="aciklama"
+                            id="desForAssign"
                             label="Açıklama"
-                            name="aciklama"
-                            autoComplete="aciklama"
+                            name="descForAssign"
+                            autoComplete="descForAssign"
                             type={"text"}
                             autoFocus
                             value={descForAssign}

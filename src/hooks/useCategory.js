@@ -28,6 +28,15 @@ const useCategory = () => {
         }
     }
 
+    const getCategoriesHaveProduct = async () => {
+        try {
+            const response = await axios.get("kategori/en-cok-urun");
+            return response;
+        } catch (err) {
+            return err.response;
+        }
+    }
+
     const postCategory = async (isim) => {
         try {
             const response = await axios.post('kategori', {
@@ -59,7 +68,7 @@ const useCategory = () => {
         }
     }
 
-    return { getCategories, getAssignCategoriesCount, getNotAssignCategoriesCount, postCategory, putCategory, deleteCategory };
+    return { getCategories, getAssignCategoriesCount, getNotAssignCategoriesCount, postCategory, putCategory, deleteCategory, getCategoriesHaveProduct };
 }
 
 export default useCategory;

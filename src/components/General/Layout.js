@@ -129,7 +129,8 @@ function Layout(props) {
                                     ":hover": {
                                         cursor: "pointer",
                                         color: "#1890ff",
-                                    }
+                                    },
+                                    fontFamily: "'Poppins', sans-serif",
                                 }} noWrap component="div">
                                     Bilgi İşlem Daire Başkanlığı Stok Takip Uygulaması
                                 </Typography>

@@ -18,6 +18,12 @@ const theme = createTheme({
     secondary: {
       main: "#393E46",
     }
+  },
+  typography: {
+    fontFamily: [
+      'Poppins',
+      "sans-serif",
+    ].join(','),
   }
 });
 

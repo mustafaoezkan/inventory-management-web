@@ -43,9 +43,6 @@ function Category() {
     useEffect(() => {
     }, [categories, mod, id, name, assigned, notAssigned, totalArray, tamTotal]);
 
-    useEffect(() => {
-
-    }, [])
 
     const mergeArrays = async () => {
         setTotalArray(

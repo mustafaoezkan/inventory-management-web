@@ -16,7 +16,7 @@ function LastAddedProducts() {
         });
     }, []);
 
-    useEffect(() => { console.log(data); }, [data]);
+    useEffect(() => { }, [data]);
 
     const seeAllProducts = (e) => {
         e.preventDefault();
@@ -56,8 +56,8 @@ function LastAddedProducts() {
                             return b.id - a.id;
                         }).slice(0, 4).map((row) => (
                             <TableRow key={row.id}>
-                                <TableCell>{row.marka}</TableCell>
-                                <TableCell>{row.kategori_ismi}</TableCell>
+                                <TableCell >{row.marka}</TableCell>
+                                <TableCell >{row.kategori_ismi}</TableCell>
                                 <TableCell>
                                     <Tag color={row.renk} key={row.renk}>
                                         {row.renk}
