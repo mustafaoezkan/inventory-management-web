@@ -509,7 +509,7 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
                     </Box>
                 </Container>
             </>
-        ) : (
+        ) : mod === "assign" ? (
             <>
                 <Container>
                     <Box component={"form"} onSubmit={handleAssignment} noValidate sx={{
@@ -561,7 +561,7 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
                     </Box>
                 </Container>
             </>
-        )
+        ) : null
     )
 }
 

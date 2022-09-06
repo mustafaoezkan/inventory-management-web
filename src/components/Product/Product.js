@@ -9,12 +9,14 @@ import { Button, Input, Modal, Table, Tooltip, Tag } from 'antd';
 import 'antd/dist/antd.min.css';
 import ProductModal from "./ProductModal";
 import useProduct from "../../hooks/useProduct";
+import ViewModal from './ViewModal';
 
 function Product() {
     const { getProducts } = useProduct();
 
     const [data, setData] = useState();
     const [openModal, setOpenModal] = useState(false);
+    const [openViewModal, setOpenViewModal] = useState(false);
     const [mod, setMod] = useState();
     const [id, setId] = useState();
     const [serial_number, setSerialNumber] = useState();
@@ -292,8 +294,17 @@ function Product() {
                 <Table onRow={(record, rowIndex) => {
                     return {
                         onClick: event => {
-                            console.log(record)
-                            console.log(rowIndex)
+                            setId(record.id);
+                            setSerialNumber(record.seri_no);
+                            setBrand(record.marka);
+                            setModel(record.model);
+                            setSize(record.boyut);
+                            setColor(record.renk);
+                            setStatus(record.durum);
+                            setDescription(record.aciklama);
+                            setCategoryName(record.kategori_ismi);
+                            setCategoryId(record.kategori_id);
+                            setOpenViewModal(true);
                         },
                     }
                 }} locale={{
@@ -332,7 +343,7 @@ function Product() {
                         </>
                     )
                 }} />
-                <Modal title={mod === "add" ? "Ürün ekle" : mod === "edit" ? "Ürünü düzenle" : mod === "delete" ? "Ürünü sil" : "Ürünü tahsis et"} visible={openModal} onCancel={() => {
+                <Modal title={mod === "add" ? "Ürün ekle" : mod === "edit" ? "Ürünü düzenle" : mod === "delete" ? "Ürünü sil" : mod === "assign" ? "Ürünü tahsis et" : "Ürün Detayı"} visible={openModal || openViewModal} onCancel={() => {
                     setMod("");
                     setId(0);
                     setSerialNumber("");
@@ -344,12 +355,14 @@ function Product() {
                     setDescription("");
                     setCategoryName("");
                     setOpenModal(false);
+                    setOpenViewModal(false);
                 }} okButtonProps={{
                     hidden: true
                 }} cancelButtonProps={{
                     hidden: true
                 }}  >
                     <ProductModal mod={mod} id={id} seri_no={serial_number} marka={brand} modeli={model} boyut={size} renk={color} durum={status} aciklama={description} kategori_ismi={category_name} kategori_id={category_id} setOpenModal={setOpenModal} />
+                    <ViewModal id={id} seri_no={serial_number} marka={brand} modeli={model} boyut={size} renk={color} durum={status} aciklama={description} kategori_ismi={category_name} kategori_id={category_id} setOpenViewModal={setOpenViewModal} />
                 </Modal>
             </Card>
         </Grow>
