@@ -9,8 +9,8 @@ import RegisteredUserCount from './RegisteredUserCount'
 function AdminLandingPage() {
     return (
         <>
-            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                <Grid container spacing={3}>
+            <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+                <Grid container spacing={4}>
                     <Slide in={true}>
                         <Grid item xs={12} md={4} lg={3}>
                             <Paper

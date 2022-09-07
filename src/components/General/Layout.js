@@ -119,8 +119,16 @@ function Layout(props) {
                 <Outlet />
             </>
         ) : (
-            <Box >
-                <Container fixed>
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                ml: `${drawerWidth}px`
+            }} >
+                <Container maxWidth={false} sx={{
+                    width: '95%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                }} >
                     <HideOnScroll {...props}>
                         <AppBar position='fixed' sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px`, height: "88px", backgroundColor: "#FFFFFF", padding: "12px" }}>
                             <Toolbar>

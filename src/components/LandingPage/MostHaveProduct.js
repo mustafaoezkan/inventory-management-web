@@ -40,7 +40,7 @@ function MostHaveProduct() {
                         transition: "all 0.3s ease-in-out",
                     }
                 }}>
-                <Typography component="h2" variant="h5" color="black" gutterBottom >En Çok Ürüne Sahip Kategori</Typography>
+                <Typography component="h2" variant="h6" color="black" gutterBottom >En Çok Ürüne Sahip Kategori</Typography>
                 <Divider />
                 <Box alignItems="center" justifyContent="center">
                     <Typography sx={{

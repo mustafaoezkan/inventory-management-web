@@ -1,22 +1,64 @@
-import { Grid, Paper, Typography } from '@mui/material';
+import { Fab, Grid, Paper, Typography } from '@mui/material';
 import { Container } from '@mui/system'
-import { Tag } from 'antd';
+import { Modal, Tag } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react'
 import useAssignment from '../../hooks/useAssignment'
+import useProduct from '../../hooks/useProduct';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function ViewModal({ id, seri_no, marka, modeli, boyut, renk, durum, aciklama, kategori_ismi, kategori_id, openViewModal, setOpenViewModal }) {
-    const { getAssignments } = useAssignment();
+    const { getAssignments, deleteAssignment } = useAssignment();
+    const { putProduct } = useProduct();
+
     const [data, setData] = useState([]);
     const [date, setDate] = useState();
     const [dateForDiff, setDateForDiff] = useState();
     const [nowDate, setNowDate] = useState();
+    const [isOpen, setIsOpen] = useState(false);
+    const [isYesNoModal, setIsYesNoModal] = useState(false);
 
     const dateConverter = (startDate, timeEnd) => {
         const newStartDate = new Date(startDate);
         const newEndDate = new Date(timeEnd);
         let result = moment(newStartDate).diff(newEndDate, 'days')
         return result
+    };
+
+    const removeAssign = (e) => {
+        e.preventDefault();
+        let assingId = data?.filter((item) => item.urun_id === id).map((item) => item.id);
+        let result = parseInt(assingId);
+
+        deleteAssignment(result).then((res) => {
+            if (res.status === 200) {
+                putProduct(id, seri_no, marka, modeli, boyut, renk, "Tahsis edilmemiş", aciklama, kategori_id).then((res) => {
+                    if (res.status === 200) {
+                        setOpenViewModal(false);
+                        toast("Tahsis kaldırıldı", {
+                            type: "info",
+                            position: "top-right",
+                            autoClose: 3000,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                        })
+                    } else {
+                        setOpenViewModal(false);
+                        toast("Tahsis kaldırılamadı", {
+                            type: "error",
+                            position: "top-right",
+                            autoClose: 3000,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                        })
+                    }
+                })
+            }
+        })
     }
 
     useEffect(() => {
@@ -44,12 +86,14 @@ function ViewModal({ id, seri_no, marka, modeli, boyut, renk, durum, aciklama, k
         let nowString = ('0' + (now.getMonth() + 1)).slice(-2) + '/' + ('0' + now.getDate()).slice(-2) + '/' + now.getFullYear();
 
         setNowDate(nowString);
-    }, [data]);
+    }, [isOpen]);
 
-    useEffect(() => { }, [data, date, nowDate, dateForDiff]);
+    useEffect(() => { }, [data, date, nowDate, dateForDiff, isOpen, isYesNoModal]);
 
     return (
-        <Container maxWidth="lg" sx={{ mt: 1, mb: 1 }}>
+        <Container maxWidth="lg" sx={{ mt: 1, mb: 1 }} onMouseEnter={() => {
+            setIsOpen(!isOpen);
+        }} >
             <Grid container spacing={3}>
                 <Grid item xs={12} md={12} >
                     <Paper
@@ -58,7 +102,7 @@ function ViewModal({ id, seri_no, marka, modeli, boyut, renk, durum, aciklama, k
                             p: 2,
                             display: 'flex',
                             flexDirection: 'column',
-                            height: durum === "Tahsis edilmiş" ? 300 : 200,
+                            height: durum === "Tahsis edilmiş" ? 350 : 200,
                             alignItems: "center",
                         }}
                     >
@@ -107,9 +151,26 @@ function ViewModal({ id, seri_no, marka, modeli, boyut, renk, durum, aciklama, k
                                     dateConverter(nowDate, dateForDiff)
                                 } gün</span>
                         </Typography> : null}
+                        {durum === "Tahsis edilmiş" ?
+                            <Fab color="primary" variant='extended' aria-label="remove" onClick={(e) => {
+                                setIsYesNoModal(true);
+                            }} >
+                                <PersonRemoveIcon sx={{ mr: 1 }} />
+                                Tahsisi kaldır
+                            </Fab> : null}
                     </Paper >
                 </Grid >
             </Grid >
+            <Modal title={"Tahsis kaldırma işlemi"} visible={isYesNoModal} onCancel={() => {
+                setIsYesNoModal(false);
+            }} onOk={(e) => {
+                removeAssign(e);
+                setIsYesNoModal(false);
+            }} okText="Evet" cancelText="Hayır" >
+                <Typography color="text.secondary" sx={{ flex: 1, fontWeight: "bold" }}>
+                    Tahsisi kaldırmak istediğinize emin misini? (Bu işlem geri alınamaz!)
+                </Typography>
+            </Modal>
         </Container >
     )
 }

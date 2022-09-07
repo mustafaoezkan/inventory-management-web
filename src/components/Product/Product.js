@@ -33,7 +33,7 @@ function Product() {
         getProducts().then(res => {
             setData(res.data);
         })
-    }, [openModal]);
+    }, [openModal, openViewModal]);
 
     useEffect(() => { }, [data, mod, id, serial_number, brand, model, size, color, status, description, category_name, category_id]);
 
@@ -319,7 +319,7 @@ function Product() {
                     triggerAsc: "Artan sıralamak için tıklayın",
                     cancelSort: "Sıralamayı iptal etmek için tıklayın",
                 }} key={data} columns={columns} dataSource={data} pagination={{
-                    pageSize: 4,
+                    pageSize: 5,
                     showTotal: (total, range) => `Toplam ${total} kayıt arasından ${range[0]}-${range[1]} arası gösteriliyor.`
 
                 }} title={() => {
@@ -362,7 +362,7 @@ function Product() {
                     hidden: true
                 }}  >
                     <ProductModal mod={mod} id={id} seri_no={serial_number} marka={brand} modeli={model} boyut={size} renk={color} durum={status} aciklama={description} kategori_ismi={category_name} kategori_id={category_id} setOpenModal={setOpenModal} />
-                    <ViewModal id={id} seri_no={serial_number} marka={brand} modeli={model} boyut={size} renk={color} durum={status} aciklama={description} kategori_ismi={category_name} kategori_id={category_id} setOpenViewModal={setOpenViewModal} />
+                    {mod === "add" ? (<></>) : (<ViewModal id={id} seri_no={serial_number} marka={brand} modeli={model} boyut={size} renk={color} durum={status} aciklama={description} kategori_ismi={category_name} kategori_id={category_id} setOpenViewModal={setOpenViewModal} />)}
                 </Modal>
             </Card>
         </Grow>

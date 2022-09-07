@@ -24,7 +24,7 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
     const [color, setColor] = useState("#000000");
     const [status, setStatus] = useState("Kullanım Dışı");
     const [description, setDescription] = useState();
-    const [descForAssign, setDescForAssign] = useState();
+    const [descForAssign, setDescForAssign] = useState("Bilgi yok");
     const [category_id, setCategory_id] = useState(1);
     const [assigned_person, setAssigned_person] = useState();
 

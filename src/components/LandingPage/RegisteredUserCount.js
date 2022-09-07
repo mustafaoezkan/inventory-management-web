@@ -33,7 +33,7 @@ function RegisteredUserCount() {
                     transition: "all 0.3s ease-in-out",
                 }
             }}>
-                <Typography component={"h2"} variant="h5" color="black" gutterBottom>Sisteme Kayıtlı Kullanıcı Sayısı</Typography>
+                <Typography component={"h2"} variant="h6" color="black" gutterBottom>Sisteme Kayıtlı Kullanıcı Sayısı</Typography>
                 <Divider />
                 <Box alignItems={"center"} justifyContent="center">
                     <Typography sx={{

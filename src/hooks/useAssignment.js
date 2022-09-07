@@ -23,9 +23,19 @@ const useAssignment = () => {
         }
     }
 
+    const deleteAssignment = async (id) => {
+        try {
+            const response = await axios.delete(`tahsis/${id}`);
+            return response;
+        } catch (err) {
+            return err.response;
+        }
+    }
+
     return {
         getAssignments,
-        postAssignment
+        postAssignment,
+        deleteAssignment
     };
 }
 

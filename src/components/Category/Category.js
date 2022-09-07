@@ -189,15 +189,26 @@ function Category() {
                                     <EditIcon color='success' />
                                 </IconButton>
                             </Tooltip>
-                            <Tooltip title="Sil">
-                                <IconButton aria-label="Sil" onClick={() => {
-                                    setId(row.id);
-                                    setMod("delete");
-                                    setOpenModal(true);
-                                }}>
-                                    <DeleteIcon color='error' />
+                            {row.tahsis_edilmis_urun_sayisi !== 0 ? (
+                                <IconButton aria-label="Sil" disabled >
+                                    <DeleteIcon color='disable' />
                                 </IconButton>
-                            </Tooltip>
+                            ) : row.tahsis_edilmemis_urun_sayisi !== 0 ? (
+                                <IconButton aria-label="Sil" disabled >
+                                    <DeleteIcon color='disable' />
+                                </IconButton>
+                            ) : (
+                                <Tooltip title="Sil">
+                                    <IconButton aria-label="Sil" onClick={() => {
+                                        setId(row.id);
+                                        setMod("delete");
+                                        setOpenModal(true);
+                                    }}>
+                                        <DeleteIcon color='error' />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+
                         </Box>
                     </>
                 )
@@ -214,7 +225,6 @@ function Category() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 padding: '2rem',
-
             }}>
                 <Table locale={{
                     emptyText: "Kayıt bulunamadı",
@@ -228,7 +238,7 @@ function Category() {
                     triggerAsc: "Artan sıralamak için tıklayın",
                     cancelSort: "Sıralamayı iptal etmek için tıklayın",
                 }} columns={columns} dataSource={tamTotal} pagination={{
-                    pageSize: 4,
+                    pageSize: 5,
                     showTotal: (total, range) => `Toplam ${total} kayıt arasından ${range[0]}-${range[1]} arası gösteriliyor.`
 
                 }} title={() => {
