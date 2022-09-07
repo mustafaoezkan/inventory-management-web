@@ -9,6 +9,7 @@ import Product from './components/Product/Product';
 import Missing from './components/General/Missing';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import User from './components/Users/User';
+import Profil from './components/Profile/Profil';
 
 const theme = createTheme({
   palette: {
@@ -41,6 +42,7 @@ function App() {
             <Route path='/kullanici' element={<User />} />
             <Route path='/kategori' element={<Category />} />
             <Route path='/urun' element={<Product />} />
+            <Route path='/profil' element={<Profil />} />
           </Route>
           {/* Missing routes */}
           <Route path="*" element={<Missing />} />

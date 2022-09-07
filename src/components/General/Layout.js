@@ -1,4 +1,4 @@
-import { AppBar, Card, Divider, Drawer, Fab, Fade, List, ListItem, ListItemButton, ListItemIcon, Slide, Toolbar, Tooltip, Typography, useScrollTrigger } from '@mui/material';
+import { AppBar, Divider, Drawer, Fab, Fade, List, ListItem, ListItemButton, ListItemIcon, Slide, Toolbar, Tooltip, Typography, useScrollTrigger } from '@mui/material';
 import { Box, Container } from '@mui/system';
 import React, { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
@@ -9,6 +9,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import CategoryIcon from '@mui/icons-material/Category';
 import GroupIcon from '@mui/icons-material/Group';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { ToastContainer } from 'react-toastify';
 
 const drawerWidth = 100;
@@ -88,6 +89,8 @@ function Layout(props) {
             setActiveTab(2);
         } else if (location.pathname === "/kullanici") {
             setActiveTab(3);
+        } else if (location.pathname === "/profil") {
+            setActiveTab(9);
         }
     }, [location])
 
@@ -131,7 +134,11 @@ function Layout(props) {
                 }} >
                     <HideOnScroll {...props}>
                         <AppBar position='fixed' sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px`, height: "88px", backgroundColor: "#FFFFFF", padding: "12px" }}>
-                            <Toolbar>
+                            <Toolbar sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}>
                                 <Typography variant="h6" color={"#5d5d5d"} sx={{
                                     fontWeight: 600,
                                     ":hover": {
@@ -142,6 +149,19 @@ function Layout(props) {
                                 }} noWrap component="div">
                                     Bilgi İşlem Daire Başkanlığı Stok Takip Uygulaması
                                 </Typography>
+                                <Tooltip title="Profil" placement="bottom">
+                                    <AccountCircleIcon sx={{
+                                        fontSize: "35px",
+                                        color: activeTab === 9 ? "#1890ff" : "#5d5d5d",
+                                        ":hover": {
+                                            cursor: "pointer",
+                                            color: "#1890ff",
+                                        }
+                                    }} onClick={(e) => {
+                                        setActiveTab(9);
+                                        navigate("/profil", { replace: true });
+                                    }} />
+                                </Tooltip>
                             </Toolbar>
                         </AppBar>
                     </HideOnScroll>
@@ -177,6 +197,7 @@ function Layout(props) {
                                     <Tooltip title="Anasayfa" placement="right">
                                         <ListItemIcon>
                                             <HomeIcon sx={{
+                                                fontSize: "27px",
                                                 color: activeTab === 0 ? "#1890ff" : "#5d5d5d",
                                                 ":hover": {
                                                     cursor: "pointer",
@@ -195,6 +216,7 @@ function Layout(props) {
                                     <Tooltip title="Kategoriler" placement="right">
                                         <ListItemIcon>
                                             <CategoryIcon sx={{
+                                                fontSize: "27px",
                                                 color: activeTab === 1 ? "#1890ff" : "#5d5d5d",
                                                 ":hover": {
                                                     cursor: "pointer",
@@ -213,6 +235,7 @@ function Layout(props) {
                                     <Tooltip title="Ürünler" placement="right">
                                         <ListItemIcon>
                                             <InventoryIcon sx={{
+                                                fontSize: "27px",
                                                 color: activeTab === 2 ? "#1890ff" : "#5d5d5d",
                                                 ":hover": {
                                                     cursor: "pointer",
@@ -231,6 +254,7 @@ function Layout(props) {
                                     <Tooltip title="Kullanıcılar" placement="right">
                                         <ListItemIcon>
                                             <GroupIcon sx={{
+                                                fontSize: "27px",
                                                 color: activeTab === 3 ? "#1890ff" : "#5d5d5d",
                                                 ":hover": {
                                                     cursor: "pointer",
@@ -251,7 +275,9 @@ function Layout(props) {
                                     }}>
                                         <Tooltip title="Çıkış Yap" placement="right">
                                             <ListItemIcon>
-                                                <ExitToAppIcon color='error' />
+                                                <ExitToAppIcon sx={{
+                                                    fontSize: "27px",
+                                                }} color='error' />
                                             </ListItemIcon>
                                         </Tooltip>
                                     </ListItemButton>
@@ -287,9 +313,6 @@ function Layout(props) {
                     pauseOnHover />
             </Box>
         )
-
-
-
     )
 }
 
