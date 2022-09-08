@@ -78,8 +78,6 @@ function Layout(props) {
     const location = useLocation();
     const [activeTab, setActiveTab] = React.useState();
 
-    document.body.style = "background-color: #f5f5f5;";
-
     useEffect(() => {
         if (location.pathname === "/") {
             setActiveTab(0);
@@ -102,8 +100,11 @@ function Layout(props) {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                height: '90vh',
-                backgroundColor: '#f5f5f5',
+                backgroundImage: "url(https://i.hizliresim.com/tsb11yf.jpg)",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                height: "100vh",
             }}>
                 <Outlet />
                 <ToastContainer
@@ -118,14 +119,31 @@ function Layout(props) {
                     pauseOnHover />
             </Box>
         ) : location.pathname === "/sifremi-unuttum" ? (
-            <>
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                backgroundColor: "#f5f5f5",
+                height: "100vh",
+            }}>
                 <Outlet />
-            </>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={2000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover />
+            </Box>
         ) : (
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                ml: `${drawerWidth}px`
+                ml: `${drawerWidth}px`,
+                backgroundColor: "#f5f5f5",
+                height: "100vh",
             }} >
                 <Container maxWidth={false} sx={{
                     width: '95%',
@@ -146,7 +164,9 @@ function Layout(props) {
                                         color: "#1890ff",
                                     },
                                     fontFamily: "'Poppins', sans-serif",
-                                }} noWrap component="div">
+                                }} noWrap component="div" onClick={() => {
+                                    navigate("/");
+                                }}>
                                     Bilgi İşlem Daire Başkanlığı Stok Takip Uygulaması
                                 </Typography>
                                 <Tooltip title="Profil" placement="bottom">
@@ -185,6 +205,9 @@ function Layout(props) {
                                 height: "auto",
                                 padding: "0.6rem",
                                 marginLeft: "0.2rem",
+                            }}
+                            onClick={() => {
+                                navigate("/");
                             }}
                         />
                         <Divider />

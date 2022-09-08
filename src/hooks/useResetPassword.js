@@ -11,7 +11,19 @@ const useResetPassword = () => {
             return err.response;
         }
     }
-    return { resetPassword };
+
+    const forgotPassword = async (email, kullanici_adi) => {
+        try {
+            const response = await axios.post("/sifre/sifremi-unuttum", {
+                email: email,
+                kullanici_adi: kullanici_adi,
+            });
+            return response;
+        } catch (err) {
+            return err.response;
+        }
+    }
+    return { resetPassword, forgotPassword };
 }
 
 export default useResetPassword;

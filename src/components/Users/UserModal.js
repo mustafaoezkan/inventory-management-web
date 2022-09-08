@@ -1,10 +1,12 @@
-import { Box, Button, Container, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Box, Button, Container, FormControl, IconButton, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
 import React, { useEffect } from 'react'
 import useRegistration from '../../hooks/useRegistration'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useUsers from '../../hooks/useUsers';
 import emailjs from "@emailjs/browser";
+import LockResetIcon from '@mui/icons-material/LockReset';
+import { Tooltip } from 'antd';
 
 function UserModal({ mod, openModal, setOpenModal, userId, ad, soyad, eposta, telefon, sicil_no, unvan, yetki }) {
     const { registration } = useRegistration()
@@ -20,6 +22,16 @@ function UserModal({ mod, openModal, setOpenModal, userId, ad, soyad, eposta, te
     const [registrationNumber, setRegistrationNumber] = React.useState('')
     const [degree, setDegree] = React.useState('')
     const [authentication, setAuthentication] = React.useState('')
+
+    const generatePassword = () => {
+        var length = 8,
+            charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+            retVal = "";
+        for (var i = 0, n = charset.length; i < length; ++i) {
+            retVal += charset.charAt(Math.floor(Math.random() * n));
+        }
+        return retVal;
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -182,18 +194,34 @@ function UserModal({ mod, openModal, setOpenModal, userId, ad, soyad, eposta, te
                                     mr: 1,
                                 }}
                             />
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="sifre"
-                                label="Şifre"
-                                name="sifre"
-                                autoComplete="sifre"
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                width: '100%'
+                            }}>
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="sifre"
+                                    label="Şifre"
+                                    name="sifre"
+                                    autoComplete="sifre"
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                                <Tooltip title="Otomatik şifre üret" >
+                                    <IconButton sx={{
+                                        mt: 1.5,
+                                    }} onClick={() => {
+                                        setPassword(generatePassword());
+                                    }}>
+                                        <LockResetIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </Box>
+
                         </Box>
                         <Box sx={{
                             display: 'flex',

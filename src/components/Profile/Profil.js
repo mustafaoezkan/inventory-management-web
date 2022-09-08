@@ -56,6 +56,7 @@ function Profil() {
                             display: 'flex',
                             height: 680,
                             flexDirection: "row",
+                            width: "41%",
                         }}  >
                             <Grid item sx={{
                                 display: 'flex',
@@ -80,7 +81,6 @@ function Profil() {
                                 <Grid sx={{
                                     mt: 3
                                 }}>
-
                                     <Typography variant="h6" component="div" gutterBottom sx={{
                                         fontStyle: "italic",
                                     }}>
@@ -152,7 +152,7 @@ function Profil() {
                                 <Typography variant="h4" component="div" gutterBottom sx={{
                                     fontWeight: "bold",
                                     mb: 3,
-                                    color: "#3f51b5",
+                                    color: "#1890ff",
                                     textAlign: "center",
                                 }}>
                                     Şifre Değişikliği Yap
@@ -188,7 +188,7 @@ function Profil() {
                                         type="submit"
                                         fullWidth
                                         variant="contained"
-                                        sx={{ mt: 3, mb: 2 }}
+                                        sx={{ mt: 3, mb: 2, backgroundColor: "#1890ff" }}
                                     >
                                         Kaydet
                                     </Button>
