@@ -64,7 +64,10 @@ function Category() {
 
     const columns = [
         {
-            title: "İsim",
+            title: <h3 style={{
+                textAlign: 'center',
+                marginLeft: '40px',
+            }}>İsim</h3>,
             dataIndex: "isim",
             width: "40%",
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
@@ -99,50 +102,92 @@ function Category() {
             key: "isim",
             sorter: (a, b) => a.isim.localeCompare(b.isim),
             sortDirections: ["ascend", "descend"],
+            render: (text, record) => {
+                return (
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        <h3>{text}</h3>
+                    </div>
+                );
+            }
         },
         {
-            title: "Tahsis edilmiş ürün sayısı",
+            title: <h3 style={{
+                textAlign: 'center',
+            }}>Tahsis edilmiş ürün sayısı</h3>,
             dataIndex: "tahsis_edilmis_urun_sayisi",
             width: "20%",
             render: (text, record) => {
                 return (
                     record.tahsis_edilmis_urun_sayisi ? (
-                        <Tag color="yellow">
-                            <Tooltip title="Tahsis edilmiş ürün sayısı">
-                                <span>{record.tahsis_edilmis_urun_sayisi}</span>
-                            </Tooltip>
-                        </Tag>
-                    ) : (
-                        <Tag color='yellow'>
-                            <Tooltip title="Tahsis edilmiş ürün sayısı">
-                                <span>0</span>
-                            </Tooltip>
-                        </Tag>
-                    )
+                        <Box sx={{
+                            justifyContent: 'center',
+                            display: 'flex',
+                        }}>
+                            <Tag color="red ">
+                                <Tooltip title="Tahsis edilmiş ürün sayısı">
+                                    <span style={{
+                                        fontSize: "20px",
+                                    }}>{record.tahsis_edilmis_urun_sayisi}</span>
+                                </Tooltip>
+                            </Tag>
+                        </Box>
 
+                    ) : (
+                        <Box sx={{
+                            justifyContent: 'center',
+                            display: 'flex',
+                        }}>
+                            <Tag color='red '>
+                                <Tooltip title="Tahsis edilmiş ürün sayısı">
+                                    <span style={{
+                                        fontSize: "20px",
+                                    }}>0</span>
+                                </Tooltip>
+                            </Tag>
+                        </Box>
+                    )
                 )
             },
             key: "tahsis_edilmis_urun_sayisi",
         },
         {
-            title: "Tahsis edilmemiş ürün sayısı",
+            title: <h3 style={{
+                textAlign: 'center',
+            }}>Tahsis edilmemiş ürün sayısı</h3>,
             dataIndex: "tahsis_edilmemis_urun_sayisi",
             width: "20%",
             render: (text, record) => {
                 return (
                     record.tahsis_edilmemis_urun_sayisi ? (
-                        <Tag color='blue'>
-                            <Tooltip title="Tahsis edilmemiş ürün sayısı">
-                                <span>{record.tahsis_edilmemis_urun_sayisi}</span>
-                            </Tooltip>
-                        </Tag>
-
+                        <Box sx={{
+                            justifyContent: 'center',
+                            display: 'flex',
+                        }}>
+                            <Tag color='green ' >
+                                <Tooltip title="Tahsis edilmemiş ürün sayısı">
+                                    <span style={{
+                                        fontSize: "20px",
+                                    }}>{record.tahsis_edilmemis_urun_sayisi}</span>
+                                </Tooltip>
+                            </Tag>
+                        </Box>
                     ) : (
-                        <Tag color="blue">
-                            <Tooltip title="Tahsis edilmemiş ürün sayısı">
-                                <span>0</span>
-                            </Tooltip>
-                        </Tag>
+                        <Box sx={{
+                            justifyContent: 'center',
+                            display: 'flex',
+                        }}>
+                            <Tag color="green ">
+                                <Tooltip title="Tahsis edilmemiş ürün sayısı">
+                                    <span style={{
+                                        fontSize: "20px",
+                                    }}>0</span>
+                                </Tooltip>
+                            </Tag>
+                        </Box>
                     )
 
                 )
@@ -150,7 +195,9 @@ function Category() {
             key: "tahsis_edilmis_urun_sayisi",
         },
         {
-            title: "Toplam ürün sayısı",
+            title: <h3 style={{
+                textAlign: 'center',
+            }}>Toplam ürün sayısı</h3>,
             width: "20%",
             render: (text, record) => {
                 if (record.tahsis_edilmemis_urun_sayisi === undefined) {
@@ -160,18 +207,28 @@ function Category() {
                     record.tahsis_edilmis_urun_sayisi = 0;
                 }
                 return (
-                    <Tag color="green">
-                        <Tooltip title="Toplam ürün sayısı">
-                            <span>{+record.tahsis_edilmemis_urun_sayisi + +record.tahsis_edilmis_urun_sayisi}</span>
-                        </Tooltip>
-                    </Tag>
+                    <Box sx={{
+                        justifyContent: 'center',
+                        display: 'flex',
+                    }}>
+                        <Tag color="blue ">
+                            <Tooltip title="Toplam ürün sayısı">
+                                <span style={{
+                                    fontSize: "20px",
+                                }}>{+record.tahsis_edilmemis_urun_sayisi + +record.tahsis_edilmis_urun_sayisi}</span>
+                            </Tooltip>
+                        </Tag>
+                    </Box>
                 )
             },
             key: "tahsis_edilmis_urun_sayisi",
         },
         {
-            title: "İşlemler",
+            title: <h3 style={{
+                textAlign: 'center',
+            }}>İşlemler</h3>,
             key: "action",
+            width: "10%",
             render: (_, row) => {
                 return (
                     <>
@@ -225,6 +282,7 @@ function Category() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 padding: '2rem',
+                mt: 4, mb: 4
             }}>
                 <Table locale={{
                     emptyText: "Kayıt bulunamadı",
@@ -248,7 +306,9 @@ function Category() {
                                 display: 'flex',
                                 justifyContent: 'space-between',
                             }}>
-                                <h3>Kategoriler</h3>
+                                <h2 style={{
+                                    color: '#1890ff',
+                                }}>Kategoriler</h2>
                                 <Tooltip title="Kategori Ekle">
                                     <Button type="primary" onClick={() => {
                                         setMod("add");
@@ -261,8 +321,11 @@ function Category() {
                             </div>
                         </>
                     )
-                }} />
-                <Modal title={mod === "add" ? "Kategori ekle" : mod === "edit" ? "Kategoriyi Düzenle" : "Kategoriyi sil"} visible={openModal} onCancel={() => {
+                }} size="large" />
+                <Modal style={{
+                    justifyContent: 'center',
+                    marginTop: '10%',
+                }} title={mod === "add" ? "Kategori ekle" : mod === "edit" ? "Kategoriyi Düzenle" : "Kategoriyi sil"} visible={openModal} onCancel={() => {
                     setMod("");
                     setId(0);
                     setName("");

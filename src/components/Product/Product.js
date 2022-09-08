@@ -10,6 +10,7 @@ import 'antd/dist/antd.min.css';
 import ProductModal from "./ProductModal";
 import useProduct from "../../hooks/useProduct";
 import ViewModal from './ViewModal';
+import { Box } from '@mui/system';
 
 function Product() {
     const { getProducts } = useProduct();
@@ -39,7 +40,10 @@ function Product() {
 
     const columns = [
         {
-            title: "Seri No",
+            title: <h3 style={{
+                textAlign: 'center',
+                marginLeft: '40px',
+            }}>Seri No</h3>,
             dataIndex: "seri_no",
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
                 return (
@@ -73,9 +77,23 @@ function Product() {
             key: "seri_no",
             sorter: (a, b) => a.seri_no.localeCompare(b.seri_no),
             sortDirections: ["ascend", "descend"],
+            render: (text, record) => {
+                return (
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        <h3>{text}</h3>
+                    </div>
+                );
+            }
         },
         {
-            title: "Marka",
+            title: <h3 style={{
+                textAlign: 'center',
+                marginLeft: '40px',
+            }}>Marka</h3>,
             dataIndex: "marka",
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
                 return (
@@ -106,16 +124,39 @@ function Product() {
             onFilter: (value, record) => {
                 return record.marka.toLowerCase().includes(value.toLowerCase());
             },
-            key: "isim",
+            key: "marka",
             sorter: (a, b) => a.marka.localeCompare(b.marka),
             sortDirections: ["ascend", "descend"],
+            render: (text, record) => {
+                return (
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        <h3 style={{
+                            fontWeight: 'normal',
+                        }}>{text}</h3>
+                    </div>
+                );
+            }
         },
         {
-            title: "Renk",
+            title: <h3 style={{
+                textAlign: 'center',
+            }}>Renk</h3>,
             dataIndex: "renk",
             render: (text) => {
                 return (
-                    <Tag color={text}>{text}</Tag>
+                    <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                    }}>
+                        <Tag style={{
+                            fontSize: '0.9rem',
+                        }} color={text}>{text}</Tag>
+                    </Box>
+
 
                 )
             },
@@ -124,16 +165,32 @@ function Product() {
             sortDirections: ["ascend", "descend"],
         },
         {
-            title: "Durum",
+            title: <h3 style={{
+                textAlign: 'center',
+            }}>Durum</h3>,
             dataIndex: "durum",
             render: (text) => {
                 if (text === "Tahsis edilmiş") {
                     return (
-                        <Tag color="red">{text}</Tag>
+                        <Box sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}>
+                            <Tag style={{
+                                fontSize: '0.9rem',
+                            }} color="red">{text}</Tag>
+                        </Box>
                     )
                 } else {
                     return (
-                        <Tag color="green">{text}</Tag>
+                        <Box sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}>
+                            <Tag style={{
+                                fontSize: '0.9rem',
+                            }} color="green">{text}</Tag>
+                        </Box>
                     )
                 }
             },
@@ -171,7 +228,10 @@ function Product() {
             sortDirections: ["ascend", "descend"],
         },
         {
-            title: "Kategori İsmi",
+            title: <h3 style={{
+                textAlign: 'center',
+                marginLeft: '40px',
+            }}>Kategori İsmi</h3>,
             dataIndex: "kategori_ismi",
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
                 return (
@@ -205,15 +265,31 @@ function Product() {
             key: "isim",
             sorter: (a, b) => a.kategori_ismi.localeCompare(b.kategori_ismi),
             sortDirections: ["ascend", "descend"],
+            render: (text, record) => {
+                return (
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        <h3 style={{
+                            fontWeight: 'normal',
+                        }}>{text}</h3>
+                    </div>
+                );
+            }
         },
         {
-            title: "İşlemler",
+            title: <h3 style={{
+                textAlign: 'center',
+            }}>İşlemler</h3>,
             key: "action",
             render: (_, row) => {
                 return (
                     <div style={{
                         display: 'flex',
                         flexDirection: 'row',
+                        justifyContent: 'center',
                     }}>
                         <Tooltip title="Düzenle">
                             <IconButton aria-label="Düzenle" onClick={() => {
@@ -289,6 +365,7 @@ function Product() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 padding: '2rem',
+                mt: 4, mb: 4,
 
             }}>
                 <Table onRow={(record, rowIndex) => {
@@ -329,7 +406,9 @@ function Product() {
                                 display: 'flex',
                                 justifyContent: 'space-between',
                             }}>
-                                <h3>Ürünler</h3>
+                                <h2 style={{
+                                    color: '#1890ff',
+                                }}>Ürünler</h2>
                                 <Tooltip title="Yeni ürün ekle">
                                     <Button type="primary" onClick={() => {
                                         setMod("add");
@@ -343,7 +422,10 @@ function Product() {
                         </>
                     )
                 }} />
-                <Modal title={mod === "add" ? "Ürün ekle" : mod === "edit" ? "Ürünü düzenle" : mod === "delete" ? "Ürünü sil" : mod === "assign" ? "Ürünü tahsis et" : "Ürün Detayı"} visible={openModal || openViewModal} onCancel={() => {
+                <Modal style={{
+                    justifyContent: 'center',
+                    marginTop: '3%',
+                }} title={mod === "add" ? "Ürün ekle" : mod === "edit" ? "Ürünü düzenle" : mod === "delete" ? "Ürünü sil" : mod === "assign" ? "Ürünü tahsis et" : "Ürün Detayı"} visible={openModal || openViewModal} onCancel={() => {
                     setMod("");
                     setId(0);
                     setSerialNumber("");
@@ -362,7 +444,7 @@ function Product() {
                     hidden: true
                 }}  >
                     <ProductModal mod={mod} id={id} seri_no={serial_number} marka={brand} modeli={model} boyut={size} renk={color} durum={status} aciklama={description} kategori_ismi={category_name} kategori_id={category_id} setOpenModal={setOpenModal} />
-                    {mod === "add" ? (<></>) : (<ViewModal id={id} seri_no={serial_number} marka={brand} modeli={model} boyut={size} renk={color} durum={status} aciklama={description} kategori_ismi={category_name} kategori_id={category_id} setOpenViewModal={setOpenViewModal} />)}
+                    {mod === "add" ? (<></>) : mod === "edit" ? (<></>) : mod === "assign" ? (<></>) : mod === "delete" ? (<></>) : (<ViewModal id={id} seri_no={serial_number} marka={brand} modeli={model} boyut={size} renk={color} durum={status} aciklama={description} kategori_ismi={category_name} kategori_id={category_id} setOpenViewModal={setOpenViewModal} />)}
                 </Modal>
             </Card>
         </Grow>

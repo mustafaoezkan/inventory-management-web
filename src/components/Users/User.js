@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import useUsers from '../../hooks/useUsers'
 import { Button, Input, Modal, Table, Tag, Tooltip } from "antd";
 import 'antd/dist/antd.min.css';
-import { Card, Grow, IconButton } from '@mui/material';
+import { Box, Card, Grow, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
@@ -34,7 +34,10 @@ function User() {
 
     const columns = [
         {
-            title: "Ad",
+            title: <h3 style={{
+                textAlign: 'center',
+                marginLeft: '40px',
+            }}>Ad</h3>,
             dataIndex: "ad",
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
                 return (
@@ -68,9 +71,23 @@ function User() {
             key: "ad",
             sorter: (a, b) => a.ad.localeCompare(b.ad),
             sortDirections: ["ascend", "descend"],
+            render: (text, record) => {
+                return (
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        <h3>{text}</h3>
+                    </div>
+                );
+            }
         },
         {
-            title: "Soyad",
+            title: <h3 style={{
+                textAlign: 'center',
+                marginLeft: '40px',
+            }}>Soyad</h3>,
             dataIndex: "soyad",
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
                 return (
@@ -104,9 +121,23 @@ function User() {
             key: "soyad",
             sorter: (a, b) => a.soyad.localeCompare(b.soyad),
             sortDirections: ["ascend", "descend"],
+            render: (text, record) => {
+                return (
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        <h3>{text}</h3>
+                    </div>
+                );
+            }
         },
         {
-            title: "Email",
+            title: <h3 style={{
+                textAlign: 'center',
+                marginLeft: '40px',
+            }}>Email</h3>,
             dataIndex: "email",
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
                 return (
@@ -140,9 +171,25 @@ function User() {
             key: "email",
             sorter: (a, b) => a.email.localeCompare(b.email),
             sortDirections: ["ascend", "descend"],
+            render: (text, record) => {
+                return (
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        <h3 style={{
+                            fontWeight: 'normal',
+                        }}>{text}</h3>
+                    </div>
+                );
+            }
         },
         {
-            title: "Telefon",
+            title: <h3 style={{
+                textAlign: 'center',
+                marginLeft: '40px',
+            }}>Telefon</h3>,
             dataIndex: "telefon",
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
                 return (
@@ -174,9 +221,25 @@ function User() {
                 return record.telefon.toLowerCase().includes(value.toLowerCase());
             },
             key: "telefon",
+            render: (text, record) => {
+                return (
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        <h3 style={{
+                            fontWeight: 'normal',
+                        }}>{text}</h3>
+                    </div>
+                );
+            }
         },
         {
-            title: "Sicil No",
+            title: <h3 style={{
+                textAlign: 'center',
+                marginLeft: '40px',
+            }}>Sicil No</h3>,
             dataIndex: "sicil_no",
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
                 return (
@@ -210,9 +273,25 @@ function User() {
             key: "sicil_no",
             sorter: (a, b) => a.sicil_no.localeCompare(b.sicil_no),
             sortDirections: ["ascend", "descend"],
+            render: (text, record) => {
+                return (
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        <h3 style={{
+                            fontWeight: 'normal',
+                        }}>{text}</h3>
+                    </div>
+                );
+            }
         },
         {
-            title: "Yetki",
+            title: <h3 style={{
+                textAlign: 'center',
+                marginLeft: '20px',
+            }}>Yetki</h3>,
             dataIndex: "yetki",
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
                 return (
@@ -246,20 +325,51 @@ function User() {
             key: "yetki",
             render: (text) => {
                 if (text === "Admin") {
-                    return <Tag color="success">Admin</Tag>
+                    return (
+                        <Box style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}>
+                            <Tag style={{
+                                fontSize: '0.9rem',
+                            }} color="success">Admin</Tag>
+                        </Box>
+                    )
+
                 } else if (text === "Kullanıcı") {
-                    return <Tag color="warning">Kullanıcı</Tag>
+                    return (
+                        <Box style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}>
+                            <Tag style={{
+                                fontSize: '0.9rem',
+                            }} color="warning">Kullanıcı</Tag>
+                        </Box>
+                    )
                 } else {
-                    return <Tag color="default">-</Tag>
+                    return <Box style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                    }}>
+                        <Tag style={{
+                            fontSize: '0.9rem',
+                        }} color="default">-</Tag>
+                    </Box>
                 }
             },
         },
         {
-            title: "İşlemler",
+            title: <h3 style={{
+                textAlign: 'center',
+            }}>İşlemler</h3>,
             key: "action",
             render: (_, row) => {
                 return (
-                    <>
+                    <Box style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                    }}>
                         <Tooltip title="Düzenle">
                             <IconButton aria-label="Düzenle" onClick={() => {
                                 setId(row.id);
@@ -285,7 +395,7 @@ function User() {
                                 <DeleteIcon color='error' />
                             </IconButton>
                         </Tooltip>
-                    </>
+                    </Box>
                 )
             }
         }
@@ -301,6 +411,7 @@ function User() {
                     justifyContent: 'center',
                     alignItems: 'center',
                     padding: '2rem',
+                    mt: 4, mb: 4
                 }}>
                     <Table locale={{
                         emptyText: "Kayıt bulunamadı",
@@ -324,7 +435,9 @@ function User() {
                                     display: 'flex',
                                     justifyContent: 'space-between',
                                 }}>
-                                    <h3>Kullanıcılar</h3>
+                                    <h2 style={{
+                                        color: '#1890ff',
+                                    }}>Kullanıcılar</h2>
                                     <Tooltip title="Yeni kullanıcı ekle">
                                         <Button type="primary" onClick={() => {
                                             setMod("add");
@@ -338,7 +451,10 @@ function User() {
                             </>
                         )
                     }} />
-                    <Modal title={mod === "add" ? "Kişi ekle" : mod === "edit" ? "Kişiyi Düzenle" : "Kişiyi sil"} visible={openModal} onCancel={() => {
+                    <Modal style={{
+                        justifyContent: 'center',
+                        marginTop: '3%',
+                    }} title={mod === "add" ? "Kişi ekle" : mod === "edit" ? "Kişiyi Düzenle" : "Kişiyi sil"} visible={openModal} onCancel={() => {
                         setMod("");
                         setId(0);
                         setName("");
