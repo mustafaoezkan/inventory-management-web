@@ -113,14 +113,8 @@ export default function SignIn() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <Grid container alignItems={"baseline"} style={{
-                        justifyContent: 'space-between',
+                        justifyContent: 'end',
                     }} >
-                        <Grid>
-                            <FormControlLabel
-                                control={<Checkbox value="remember" color="primary" />}
-                                label="Beni Hatırla"
-                            />
-                        </Grid>
                         <Grid >
                             <Link href="/sifremi-unuttum" variant="body2">
                                 Şifremi unuttum
