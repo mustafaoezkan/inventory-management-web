@@ -1,8 +1,7 @@
 import { Button, Divider, Grid, Paper, TextField, Typography } from '@mui/material'
 import { Box, Container } from '@mui/system'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import useResetPassword from '../../hooks/useResetPassword'
-import emailjs from "@emailjs/browser";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
@@ -10,29 +9,12 @@ import { useNavigate } from 'react-router-dom';
 function ResetPassword() {
     const { forgotPassword } = useResetPassword();
     const navigate = useNavigate();
-    const [newPw, setNewPw] = useState("");
-
     const handleSubmit = (e) => {
         e.preventDefault()
         const email = e.target.email.value
         const kullanici_adi = e.target.kullanici_adi.value
         forgotPassword(email, kullanici_adi).then((res) => {
-            // form
-            const templateParams = {
-                email: email,
-                kullanici_adi: kullanici_adi,
-                sifre: res.data.sifre,
-            };
-
             if (res.status === 200) {
-                console.log(res.data.sifre)
-                emailjs.send('service_bcw6jsn', 'template_wmaz79a', templateParams, "Uu3D_NsCtJuSlIPmW")
-                    .then((result) => {
-                        console.log(result.text);
-                    }, (error) => {
-                        console.log(error.text);
-                    })
-                setNewPw("")
                 toast("Şifreniz e-posta adresinize gönderildi.", {
                     type: "success",
                     position: "top-right",
@@ -57,9 +39,6 @@ function ResetPassword() {
             }
         });
     };
-
-    useEffect(() => {
-    }, [newPw]);
 
     return (
         <Container maxWidth="lg" sx={{

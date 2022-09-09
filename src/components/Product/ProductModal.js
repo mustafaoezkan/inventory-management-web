@@ -23,7 +23,7 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
     const [size, setSize] = useState();
     const [color, setColor] = useState("#000000");
     const [status, setStatus] = useState("Kullanım Dışı");
-    const [description, setDescription] = useState();
+    const [description, setDescription] = useState("Bilgi yok");
     const [descForAssign, setDescForAssign] = useState("Bilgi yok");
     const [category_id, setCategory_id] = useState(1);
     const [assigned_person, setAssigned_person] = useState();
@@ -204,7 +204,7 @@ function ProductModal({ mod, id, seri_no, marka, modeli, boyut, renk, durum, aci
             setSize('');
             setColor('#000000');
             setStatus('');
-            setDescription('');
+            setDescription('Bilgi yok');
             setCategory_id('');
         } else if (mod === "delete") {
             setProduct_id(id);

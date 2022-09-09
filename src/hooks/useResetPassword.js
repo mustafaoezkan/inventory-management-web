@@ -1,10 +1,11 @@
 import axios from "../components/api/axios";
 
 const useResetPassword = () => {
-    const resetPassword = async (id, sifre) => {
+    const resetPassword = async (id, sifre, email) => {
         try {
             const response = await axios.put(`/sifre/${id}`, {
                 sifre: sifre,
+                email: email,
             });
             return response;
         } catch (err) {

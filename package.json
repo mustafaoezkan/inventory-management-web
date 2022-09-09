@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emailjs/browser": "^3.7.0",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@mui/icons-material": "^5.10.2",
@@ -19,7 +18,6 @@
     "react": "^18.2.0",
     "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
-    "react-highlight-words": "^0.18.0",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.1",
     "react-toastify": "^9.0.8",

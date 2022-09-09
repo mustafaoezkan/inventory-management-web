@@ -13,7 +13,7 @@ function Profil() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (pw1 === pw2) {
-            resetPassword(JSON.parse(localStorage.getItem("info"))[0].id, pw1);
+            resetPassword(JSON.parse(localStorage.getItem("info"))[0].id, pw1, JSON.parse(localStorage.getItem("info"))[0].email);
             toast("Şifre güncellendi", {
                 type: "info",
                 position: "top-right",
