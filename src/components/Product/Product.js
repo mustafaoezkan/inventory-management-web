@@ -30,6 +30,8 @@ function Product() {
     const [category_name, setCategoryName] = useState();
     const [category_id, setCategoryId] = useState();
 
+    const AUTH = JSON.parse(localStorage.getItem("info"))[0].yetki;
+
     useEffect(() => {
         getProducts().then(res => {
             setData(res.data);
@@ -279,60 +281,21 @@ function Product() {
                 );
             }
         },
-        {
-            title: <h3 style={{
-                textAlign: 'center',
-            }}>İşlemler</h3>,
-            key: "action",
-            render: (_, row) => {
-                return (
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                    }}>
-                        <Tooltip title="Düzenle">
-                            <IconButton aria-label="Düzenle" onClick={() => {
-                                setId(row.id);
-                                setSerialNumber(row.seri_no);
-                                setBrand(row.marka);
-                                setModel(row.model);
-                                setSize(row.boyut);
-                                setColor(row.renk);
-                                setStatus(row.durum);
-                                setDescription(row.aciklama);
-                                setCategoryName(row.kategori_ismi);
-                                setCategoryId(row.kategori_id);
-                                setMod("edit");
-                                setOpenModal(true);
-                            }}>
-                                <EditIcon color='success' />
-                            </IconButton>
-                        </Tooltip>
-                        {row.durum === "Tahsis edilmiş" ? (
-                            <IconButton aria-label="Sil" disabled>
-                                <DeleteIcon color="disabled" />
-                            </IconButton>
-                        ) : (
-                            <Tooltip title="Sil">
-                                <IconButton aria-label="Sil" onClick={() => {
-                                    setId(row.id);
-                                    setMod("delete");
-                                    setOpenModal(true);
-                                }}>
-                                    <DeleteIcon color='error' />
-                                </IconButton>
-                            </Tooltip>
-                        )}
-                        {row.durum === "Tahsis edilmiş" ? (
-                            <IconButton disabled aria-label="Tahsis Et" onClick={() => {
-
-                            }}>
-                                <AccountBoxIcon color='disabled' />
-                            </IconButton>
-                        ) : (
-                            <Tooltip title="Tahsis Et">
-                                <IconButton aria-label="Tahsis Et" onClick={() => {
+        AUTH[1] === "1" ?
+            {
+                title: <h3 style={{
+                    textAlign: 'center',
+                }}>İşlemler</h3>,
+                key: "action",
+                render: (_, row) => {
+                    return (
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                        }}>
+                            <Tooltip title="Düzenle">
+                                <IconButton aria-label="Düzenle" onClick={() => {
                                     setId(row.id);
                                     setSerialNumber(row.seri_no);
                                     setBrand(row.marka);
@@ -343,17 +306,57 @@ function Product() {
                                     setDescription(row.aciklama);
                                     setCategoryName(row.kategori_ismi);
                                     setCategoryId(row.kategori_id);
-                                    setMod("assign");
+                                    setMod("edit");
                                     setOpenModal(true);
                                 }}>
-                                    <AccountBoxIcon color='primary' />
+                                    <EditIcon color='success' />
                                 </IconButton>
                             </Tooltip>
-                        )}
-                    </div>
-                )
-            }
-        }
+                            {row.durum === "Tahsis edilmiş" ? (
+                                <IconButton aria-label="Sil" disabled>
+                                    <DeleteIcon color="disabled" />
+                                </IconButton>
+                            ) : (
+                                <Tooltip title="Sil">
+                                    <IconButton aria-label="Sil" onClick={() => {
+                                        setId(row.id);
+                                        setMod("delete");
+                                        setOpenModal(true);
+                                    }}>
+                                        <DeleteIcon color='error' />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+                            {row.durum === "Tahsis edilmiş" ? (
+                                <IconButton disabled aria-label="Tahsis Et" onClick={() => {
+
+                                }}>
+                                    <AccountBoxIcon color='disabled' />
+                                </IconButton>
+                            ) : (
+                                <Tooltip title="Tahsis Et">
+                                    <IconButton aria-label="Tahsis Et" onClick={() => {
+                                        setId(row.id);
+                                        setSerialNumber(row.seri_no);
+                                        setBrand(row.marka);
+                                        setModel(row.model);
+                                        setSize(row.boyut);
+                                        setColor(row.renk);
+                                        setStatus(row.durum);
+                                        setDescription(row.aciklama);
+                                        setCategoryName(row.kategori_ismi);
+                                        setCategoryId(row.kategori_id);
+                                        setMod("assign");
+                                        setOpenModal(true);
+                                    }}>
+                                        <AccountBoxIcon color='primary' />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+                        </div>
+                    )
+                }
+            } : {}
     ]
 
     return (
@@ -409,15 +412,19 @@ function Product() {
                                 <h2 style={{
                                     color: '#1890ff',
                                 }}>Ürünler</h2>
-                                <Tooltip title="Yeni ürün ekle">
-                                    <Button type="primary" onClick={() => {
-                                        setMod("add");
-                                        setOpenModal(true)
-                                    }
-                                    }>
-                                        <AddIcon />
-                                    </Button>
-                                </Tooltip>
+                                {AUTH[1] === "1" ? (
+                                    <Tooltip title="Yeni ürün ekle">
+                                        <Button type="primary" onClick={() => {
+                                            setMod("add");
+                                            setOpenModal(true)
+                                        }
+                                        }>
+                                            <AddIcon />
+                                        </Button>
+                                    </Tooltip>
+                                ) : (
+                                    <></>
+                                )}
                             </div>
                         </>
                     )

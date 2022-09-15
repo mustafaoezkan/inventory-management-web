@@ -22,6 +22,8 @@ function Category() {
     const [id, setId] = useState();
     const [name, setName] = useState();
 
+    const AUTH = JSON.parse(localStorage.getItem("info"))[0].yetki;
+
     useEffect(() => {
         getCategories().then(res => {
             setCategories(res.data)
@@ -32,7 +34,6 @@ function Category() {
         getNotAssignCategoriesCount().then(res => {
             setNotAssigned(res.data)
         })
-
     }, [openModal]);
 
     useEffect(() => {
@@ -223,54 +224,55 @@ function Category() {
             },
             key: "tahsis_edilmis_urun_sayisi",
         },
-        {
-            title: <h3 style={{
-                textAlign: 'center',
-            }}>İşlemler</h3>,
-            key: "action",
-            width: "10%",
-            render: (_, row) => {
-                return (
-                    <>
-                        <Box sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                        }} >
-                            <Tooltip title="Düzenle">
-                                <IconButton aria-label="Düzenle" onClick={() => {
-                                    setId(row.id);
-                                    setName(row.isim);
-                                    setMod("edit");
-                                    setOpenModal(true);
-                                }}>
-                                    <EditIcon color='success' />
-                                </IconButton>
-                            </Tooltip>
-                            {row.tahsis_edilmis_urun_sayisi !== 0 ? (
-                                <IconButton aria-label="Sil" disabled >
-                                    <DeleteIcon color='disable' />
-                                </IconButton>
-                            ) : row.tahsis_edilmemis_urun_sayisi !== 0 ? (
-                                <IconButton aria-label="Sil" disabled >
-                                    <DeleteIcon color='disable' />
-                                </IconButton>
-                            ) : (
-                                <Tooltip title="Sil">
-                                    <IconButton aria-label="Sil" onClick={() => {
+        AUTH[0] === "1" ?
+            {
+                title: <h3 style={{
+                    textAlign: 'center',
+                }}>İşlemler</h3>,
+                key: "action",
+                width: "10%",
+                render: (_, row) => {
+                    return (
+                        <>
+                            <Box sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                            }} >
+                                <Tooltip title="Düzenle">
+                                    <IconButton aria-label="Düzenle" onClick={() => {
                                         setId(row.id);
-                                        setMod("delete");
+                                        setName(row.isim);
+                                        setMod("edit");
                                         setOpenModal(true);
                                     }}>
-                                        <DeleteIcon color='error' />
+                                        <EditIcon color='success' />
                                     </IconButton>
                                 </Tooltip>
-                            )}
+                                {row.tahsis_edilmis_urun_sayisi !== 0 ? (
+                                    <IconButton aria-label="Sil" disabled >
+                                        <DeleteIcon color='disable' />
+                                    </IconButton>
+                                ) : row.tahsis_edilmemis_urun_sayisi !== 0 ? (
+                                    <IconButton aria-label="Sil" disabled >
+                                        <DeleteIcon color='disable' />
+                                    </IconButton>
+                                ) : (
+                                    <Tooltip title="Sil">
+                                        <IconButton aria-label="Sil" onClick={() => {
+                                            setId(row.id);
+                                            setMod("delete");
+                                            setOpenModal(true);
+                                        }}>
+                                            <DeleteIcon color='error' />
+                                        </IconButton>
+                                    </Tooltip>
+                                )}
 
-                        </Box>
-                    </>
-                )
-            }
-        }
+                            </Box>
+                        </>
+                    )
+                }
+            } : {}
     ]
 
     return (
@@ -309,15 +311,18 @@ function Category() {
                                 <h2 style={{
                                     color: '#1890ff',
                                 }}>Kategoriler</h2>
-                                <Tooltip title="Kategori Ekle">
-                                    <Button type="primary" onClick={() => {
-                                        setMod("add");
-                                        setOpenModal(true)
-                                    }
-                                    }>
-                                        <AddIcon />
-                                    </Button>
-                                </Tooltip>
+                                {AUTH[0] === "1" ? (
+                                    <Tooltip title="Kategori Ekle">
+                                        <Button type="primary" onClick={() => {
+                                            setMod("add");
+                                            setOpenModal(true)
+                                        }
+                                        }>
+                                            <AddIcon />
+                                        </Button>
+                                    </Tooltip>
+                                ) : null}
+
                             </div>
                         </>
                     )

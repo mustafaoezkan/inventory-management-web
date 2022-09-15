@@ -50,7 +50,7 @@ const useCategory = () => {
 
     const putCategory = async (id, isim) => {
         try {
-            const response = await axios.put(`kategori/${id}`, {
+            const response = await axios.put(`kategori/${id}/`, {
                 isim
             });
             return response;
@@ -61,7 +61,14 @@ const useCategory = () => {
 
     const deleteCategory = async (id) => {
         try {
-            const response = await axios.delete(`kategori/${id}`);
+            const response = await axios.delete(`kategori/${id}/`, {
+                // cors error
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+                }
+            }
+            );
             return response;
         } catch (err) {
             return err.response;

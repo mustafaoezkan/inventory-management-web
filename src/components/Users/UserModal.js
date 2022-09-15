@@ -1,4 +1,4 @@
-import { Box, Button, Container, FormControl, IconButton, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Box, Button, Checkbox, Container, FormControl, FormControlLabel, IconButton, InputLabel, TextField, Typography } from '@mui/material'
 import React, { useEffect } from 'react'
 import useRegistration from '../../hooks/useRegistration'
 import { toast } from 'react-toastify';
@@ -7,7 +7,7 @@ import useUsers from '../../hooks/useUsers';
 import LockResetIcon from '@mui/icons-material/LockReset';
 import { Tooltip } from 'antd';
 
-function UserModal({ mod, openModal, setOpenModal, userId, ad, soyad, eposta, telefon, sicil_no, unvan, yetki }) {
+function UserModal({ mod, openModal, setOpenModal, userId, ad, soyad, eposta, telefon, sicil_no, unvan, yetki, yetki0, yetki1, yetki2 }) {
     const { registration } = useRegistration()
     const { putUser, deleteUser } = useUsers();
 
@@ -21,6 +21,10 @@ function UserModal({ mod, openModal, setOpenModal, userId, ad, soyad, eposta, te
     const [registrationNumber, setRegistrationNumber] = React.useState('')
     const [degree, setDegree] = React.useState('')
     const [authentication, setAuthentication] = React.useState('')
+    const [categoryAuth, setCategoryAuth] = React.useState(false)
+    const [productAuth, setProductAuth] = React.useState(false)
+    const [userAuth, setUserAuth] = React.useState(false)
+    const [submitBtn, setSubmitBtn] = React.useState(false)
 
     const generatePassword = () => {
         var length = 8,
@@ -36,6 +40,10 @@ function UserModal({ mod, openModal, setOpenModal, userId, ad, soyad, eposta, te
         e.preventDefault()
         registration(username, password, name, surname, email, number, registrationNumber, degree, authentication).then(res => {
             if (res.status === 201) {
+                setSubmitBtn(false)
+                setUserAuth(false)
+                setCategoryAuth(false)
+                setProductAuth(false)
                 setUsername('')
                 setPassword('')
                 setName('')
@@ -71,6 +79,10 @@ function UserModal({ mod, openModal, setOpenModal, userId, ad, soyad, eposta, te
         e.preventDefault();
         putUser(id, name, surname, email, number, registrationNumber, degree, authentication).then(res => {
             if (res.status === 200) {
+                setSubmitBtn(false)
+                setUserAuth(false)
+                setCategoryAuth(false)
+                setProductAuth(false)
                 setName('')
                 setSurname('')
                 setEmail('')
@@ -134,7 +146,24 @@ function UserModal({ mod, openModal, setOpenModal, userId, ad, soyad, eposta, te
     }
 
     const handleChange = (e) => {
-        setAuthentication(e.target.value)
+        e.preventDefault();
+        if (categoryAuth === true && productAuth === true && userAuth === true) {
+            setAuthentication("111")
+        } else if (categoryAuth === true && productAuth === true && userAuth === false) {
+            setAuthentication("110")
+        } else if (categoryAuth === true && productAuth === false && userAuth === true) {
+            setAuthentication("101")
+        } else if (categoryAuth === true && productAuth === false && userAuth === false) {
+            setAuthentication("100")
+        } else if (categoryAuth === false && productAuth === true && userAuth === true) {
+            setAuthentication("011")
+        } else if (categoryAuth === false && productAuth === true && userAuth === false) {
+            setAuthentication("010")
+        } else if (categoryAuth === false && productAuth === false && userAuth === true) {
+            setAuthentication("001")
+        } else if (categoryAuth === false && productAuth === false && userAuth === false) {
+            setAuthentication("000")
+        }
     };
 
     useEffect(() => {
@@ -147,6 +176,9 @@ function UserModal({ mod, openModal, setOpenModal, userId, ad, soyad, eposta, te
             setRegistrationNumber(sicil_no)
             setDegree(unvan)
             setAuthentication(yetki)
+            setCategoryAuth(yetki0);
+            setProductAuth(yetki1);
+            setUserAuth(yetki2);
         } else if (mod === "add") {
             setName('')
             setSurname('')
@@ -159,6 +191,8 @@ function UserModal({ mod, openModal, setOpenModal, userId, ad, soyad, eposta, te
             setId(userId);
         }
     }, [userId, ad, soyad, eposta, telefon, sicil_no, unvan, yetki]);
+
+    useEffect(() => { }, [authentication, categoryAuth, productAuth, userAuth, submitBtn, yetki])
 
     return (
         mod === "add" ? (
@@ -312,21 +346,39 @@ function UserModal({ mod, openModal, setOpenModal, userId, ad, soyad, eposta, te
                                 onChange={(e) => setDegree(e.target.value)}
                             />
                         </Box>
-
+                        <InputLabel id="demo-simple-select-label">Yetki</InputLabel>
                         <FormControl sx={{
                             mt: 2,
-                        }} fullWidth>
-                            <InputLabel id="demo-simple-select-label">Yetki</InputLabel>
-                            <Select
-                                value={authentication}
-                                label="Yetki"
-                                onChange={handleChange}
-                            >
-                                <MenuItem value={"Admin"}>Admin</MenuItem>
-                                <MenuItem value={"Kullanıcı"}>Kullanıcı</MenuItem>
-                            </Select>
+                            display: 'flex',
+                            flexDirection: 'row',
+                        }} fullWidth onChange={(e) => {
+                            handleChange(e)
+                        }}>
+
+                            <FormControlLabel sx={{
+                                ml: 1,
+                            }} value={categoryAuth} control={<Checkbox defaultChecked={yetki0 ? yetki0 : false} />} label="Kategori" onChange={(e) => {
+                                setCategoryAuth(e.target.checked)
+                            }} />
+                            <FormControlLabel sx={{
+                                ml: 1,
+                            }} value={productAuth} control={<Checkbox defaultChecked={yetki1 ? yetki1 : false} />} label="Ürün" onChange={(e) => {
+                                setProductAuth(e.target.checked)
+                            }} />
+                            <FormControlLabel sx={{
+                                ml: 1,
+                            }} value={userAuth} control={<Checkbox defaultChecked={yetki2 ? yetki2 : false} />} label="Kullanıcı" onChange={(e) => {
+                                setUserAuth(e.target.checked)
+                            }} />
+                            <Button sx={{
+                                ml: 1,
+                            }} variant="contained" disabled={submitBtn} onClick={(e) => {
+                                setSubmitBtn(true)
+                                handleChange(e)
+                            }}>Ekle</Button>
                         </FormControl>
                         <Button
+                            disabled={!submitBtn}
                             type="submit"
                             fullWidth
                             variant="contained"
@@ -439,21 +491,39 @@ function UserModal({ mod, openModal, setOpenModal, userId, ad, soyad, eposta, te
                                 onChange={(e) => setDegree(e.target.value)}
                             />
                         </Box>
-
+                        <InputLabel id="demo-simple-select-label">Yetki</InputLabel>
                         <FormControl sx={{
                             mt: 2,
-                        }} fullWidth>
-                            <InputLabel id="demo-simple-select-label">Yetki</InputLabel>
-                            <Select
-                                value={authentication}
-                                label="Yetki"
-                                onChange={handleChange}
-                            >
-                                <MenuItem value={"Admin"}>Admin</MenuItem>
-                                <MenuItem value={"Kullanıcı"}>Kullanıcı</MenuItem>
-                            </Select>
+                            display: 'flex',
+                            flexDirection: 'row',
+                        }} fullWidth onChange={(e) => {
+                            handleChange(e)
+                        }}>
+
+                            <FormControlLabel sx={{
+                                ml: 1,
+                            }} value={categoryAuth} control={<Checkbox defaultChecked={yetki0} />} label="Kategori" onChange={(e) => {
+                                setCategoryAuth(e.target.checked)
+                            }} />
+                            <FormControlLabel sx={{
+                                ml: 1,
+                            }} value={productAuth} control={<Checkbox defaultChecked={yetki1} />} label="Ürün" onChange={(e) => {
+                                setProductAuth(e.target.checked)
+                            }} />
+                            <FormControlLabel sx={{
+                                ml: 1,
+                            }} value={userAuth} control={<Checkbox defaultChecked={yetki2} />} label="Kullanıcı" onChange={(e) => {
+                                setUserAuth(e.target.checked)
+                            }} />
+                            <Button sx={{
+                                ml: 1,
+                            }} variant="contained" disabled={submitBtn} onClick={(e) => {
+                                setSubmitBtn(true)
+                                handleChange(e)
+                            }}>Ekle</Button>
                         </FormControl>
                         <Button
+                            disabled={!submitBtn}
                             type="submit"
                             fullWidth
                             variant="contained"

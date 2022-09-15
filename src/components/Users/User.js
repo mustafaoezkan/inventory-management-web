@@ -22,7 +22,11 @@ function User() {
     const [registrationNumber, setRegistrationNumber] = useState();
     const [degree, setDegree] = useState();
     const [authentication, setAuthentication] = useState();
+    const [categoryAuth, setCategoryAuth] = useState();
+    const [productAuth, setProductAuth] = useState();
+    const [userAuth, setUserAuth] = useState();
 
+    const AUTH = JSON.parse(localStorage.getItem("info"))[0].yetki;
 
     useEffect(() => {
         getUsers().then(res => {
@@ -30,7 +34,7 @@ function User() {
         })
     }, [openModal]);
 
-    useEffect(() => { }, [data, mod, id, name, surname, email, phone, registrationNumber, degree, authentication]);
+    useEffect(() => { }, [data, mod, id, name, surname, email, phone, registrationNumber, degree, authentication, categoryAuth, productAuth, userAuth]);
 
     const columns = [
         {
@@ -324,81 +328,174 @@ function User() {
             },
             key: "yetki",
             render: (text) => {
-                if (text === "Admin") {
+                if (text === "111") {
                     return (
-                        <Box style={{
+                        <div style={{
                             display: 'flex',
                             justifyContent: 'center',
+                            alignItems: 'center',
                         }}>
-                            <Tag style={{
-                                fontSize: '0.9rem',
-                            }} color="success">Admin</Tag>
-                        </Box>
-                    )
-
-                } else if (text === "Kullanıcı") {
+                            <h3 style={{
+                                fontWeight: 'normal',
+                            }}>
+                                <Tag color="green">Kategori</Tag>
+                                <Tag color="yellow">Ürün</Tag>
+                                <Tag color="blue">Kullanıcı</Tag>
+                            </h3>
+                        </div>
+                    );
+                } else if (text === "110") {
                     return (
-                        <Box style={{
+                        <div style={{
                             display: 'flex',
                             justifyContent: 'center',
+                            alignItems: 'center',
                         }}>
-                            <Tag style={{
-                                fontSize: '0.9rem',
-                            }} color="warning">Kullanıcı</Tag>
-                        </Box>
-                    )
-                } else {
-                    return <Box style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                    }}>
-                        <Tag style={{
-                            fontSize: '0.9rem',
-                        }} color="default">-</Tag>
-                    </Box>
+                            <h3 style={{
+                                fontWeight: 'normal',
+                            }}>
+                                <Tag color="green">Kategori</Tag>
+                                <Tag color="yellow">Ürün</Tag>
+                            </h3>
+                        </div>
+                    );
+                } else if (text === "101") {
+                    return (
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                            <h3 style={{
+                                fontWeight: 'normal',
+                            }}>
+                                <Tag color="green">Kategori</Tag>
+                                <Tag color="blue">Kullanıcı</Tag>
+                            </h3>
+                        </div>
+                    );
+                } else if (text === "100") {
+                    return (
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                            <h3 style={{
+                                fontWeight: 'normal',
+                            }}><Tag color="green">Kategori</Tag></h3>
+                        </div>
+                    );
+                } else if (text === "011") {
+                    return (
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                            <h3 style={{
+                                fontWeight: 'normal',
+                            }}>
+                                <Tag color="yellow">Ürün</Tag>
+                                <Tag color="blue">Kullanıcı</Tag>
+                            </h3>
+                        </div>
+                    );
+                } else if (text === "010") {
+                    return (
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                            <h3 style={{
+                                fontWeight: 'normal',
+                            }}>
+                                <Tag color="yellow">Ürün</Tag>
+                            </h3>
+                        </div>
+                    );
+                } else if (text === "001") {
+                    return (
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                            <h3 style={{
+                                fontWeight: 'normal',
+                            }}>
+                                <Tag color="blue">Kullanıcı</Tag>
+                            </h3>
+                        </div>
+                    );
+                } else if (text === "000") {
+                    return (
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                            <h3 style={{
+                                fontWeight: 'normal',
+                            }}>
+                                <Tag color="red">Yetki yok</Tag>
+                            </h3>
+                        </div>
+                    );
                 }
             },
         },
-        {
-            title: <h3 style={{
-                textAlign: 'center',
-            }}>İşlemler</h3>,
-            key: "action",
-            render: (_, row) => {
-                return (
-                    <Box style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                    }}>
-                        <Tooltip title="Düzenle">
-                            <IconButton aria-label="Düzenle" onClick={() => {
-                                setId(row.id);
-                                setName(row.ad);
-                                setSurname(row.soyad);
-                                setEmail(row.email);
-                                setPhone(row.telefon);
-                                setRegistrationNumber(row.sicil_no);
-                                setDegree(row.unvan);
-                                setAuthentication(row.yetki);
-                                setMod("edit");
-                                setOpenModal(true);
-                            }}>
-                                <EditIcon color='success' />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Sil">
-                            <IconButton aria-label="Sil" onClick={() => {
-                                setId(row.id);
-                                setMod("delete");
-                                setOpenModal(true);
-                            }}>
-                                <DeleteIcon color='error' />
-                            </IconButton>
-                        </Tooltip>
-                    </Box>
-                )
-            }
-        }
+        AUTH[2] === '1' ?
+            {
+                title: <h3 style={{
+                    textAlign: 'center',
+                }}>İşlemler</h3>,
+                key: "action",
+                render: (_, row) => {
+                    return (
+                        <Box style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}>
+                            <Tooltip title="Düzenle">
+                                <IconButton aria-label="Düzenle" onClick={() => {
+                                    setId(row.id);
+                                    setName(row.ad);
+                                    setSurname(row.soyad);
+                                    setEmail(row.email);
+                                    setPhone(row.telefon);
+                                    setRegistrationNumber(row.sicil_no);
+                                    setDegree(row.unvan);
+                                    setAuthentication(row.yetki);
+                                    if (row.yetki[0] === "1") {
+                                        setCategoryAuth(true);
+                                    }
+                                    if (row.yetki[1] === "1") {
+                                        setProductAuth(true);
+                                    }
+                                    if (row.yetki[2] === "1") {
+                                        setUserAuth(true);
+                                    }
+                                    setMod("edit");
+                                    setOpenModal(true);
+                                }}>
+                                    <EditIcon color='success' />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Sil">
+                                <IconButton aria-label="Sil" onClick={() => {
+                                    setId(row.id);
+                                    setMod("delete");
+                                    setOpenModal(true);
+                                }}>
+                                    <DeleteIcon color='error' />
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
+                    )
+                }
+            } : {}
     ]
 
     return (
@@ -438,15 +535,18 @@ function User() {
                                     <h2 style={{
                                         color: '#1890ff',
                                     }}>Kullanıcılar</h2>
-                                    <Tooltip title="Yeni kullanıcı ekle">
-                                        <Button type="primary" onClick={() => {
-                                            setMod("add");
-                                            setOpenModal(true)
-                                        }
-                                        }>
-                                            <AddIcon />
-                                        </Button>
-                                    </Tooltip>
+                                    {AUTH[2] === '1' ?
+                                        <Tooltip title="Yeni kullanıcı ekle">
+                                            <Button type="primary" onClick={() => {
+                                                setMod("add");
+                                                setOpenModal(true)
+                                            }
+                                            }>
+                                                <AddIcon />
+                                            </Button>
+                                        </Tooltip>
+                                        : (<> </>)
+                                    }
                                 </div>
                             </>
                         )
@@ -464,13 +564,16 @@ function User() {
                         setRegistrationNumber("");
                         setDegree("");
                         setAuthentication("");
+                        setCategoryAuth(false);
+                        setProductAuth(false);
+                        setUserAuth(false);
                         setOpenModal(false);
                     }} okButtonProps={{
                         hidden: true
                     }} cancelButtonProps={{
                         hidden: true
                     }}  >
-                        <UserModal mod={mod} openModal={openModal} setOpenModal={setOpenModal} userId={id} ad={name} soyad={surname} eposta={email} telefon={phone} sicil_no={registrationNumber} unvan={degree} yetki={authentication} />
+                        <UserModal mod={mod} openModal={openModal} setOpenModal={setOpenModal} userId={id} ad={name} soyad={surname} eposta={email} telefon={phone} sicil_no={registrationNumber} unvan={degree} yetki={authentication} yetki0={categoryAuth} yetki1={productAuth} yetki2={userAuth} />
                     </Modal>
                 </Card>
             </Grow>

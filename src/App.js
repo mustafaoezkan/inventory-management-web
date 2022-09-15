@@ -36,10 +36,11 @@ function App() {
           {/* Public routes */}
           <Route path="giris" element={<Login />} />
           <Route path="sifremi-unuttum" element={<ResetPassword />} />
+          <Route path='/kullanici' element={<User />} />
           {/* Private routes */}
           <Route element={<RequireAuth />}>
             <Route path="/" element={<LandingPage />} />
-            <Route path='/kullanici' element={<User />} />
+
             <Route path='/kategori' element={<Category />} />
             <Route path='/urun' element={<Product />} />
             <Route path='/profil' element={<Profil />} />

@@ -19,7 +19,6 @@ function MostHaveProduct() {
     useEffect(() => {
         getCategoriesHaveProduct().then((res) => {
             setData(res.data);
-            console.log(res.data);
             setMaxValue(Math.max(...res.data.map((item) => item.urun_sayisi)));
         });
     }, [])

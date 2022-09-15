@@ -9,6 +9,7 @@ function Profil() {
     const { resetPassword } = useResetPassword();
     const [pw1, setPw1] = React.useState("");
     const [pw2, setPw2] = React.useState("");
+    const AUTH = JSON.parse(localStorage.getItem("info"))[0].yetki;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -146,7 +147,7 @@ function Profil() {
                                             <span style={{
                                                 fontStyle: "normal",
                                                 fontWeight: "bold",
-                                            }}>Yetki:</span> {JSON.parse(localStorage.getItem("info"))[0].yetki}
+                                            }}>Yetki:</span> {AUTH === "111" ? "Kategori-Ürün-Kullanıcı" : AUTH === "110" ? "Kategori-Ürün" : AUTH === "101" ? "Kategori-Kullanıcı" : AUTH === "100" ? "Kategori" : AUTH === "011" ? "Ürün-Kullanıcı" : AUTH === "010" ? "Ürün" : AUTH === "001" ? "Kullanıcı" : "Yetki Yok"}
                                         </Typography>
                                     </Grid>
                                 </Grid>
